@@ -23,8 +23,9 @@ public class StrColumn implements Column<String> {
     }
 
     public Criteria startsWith(String comparate) {
-        return new Criteria(null, )
+        return new Criteria(null, ) // TODO
     }
+
 
 
 }

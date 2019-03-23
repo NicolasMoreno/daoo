@@ -1,9 +1,8 @@
 package tp2.nicolasmoreno.builder;
 
-import daoo.query.Column;
-import daoo.query.Criteria;
-import daoo.query.Expression;
-import daoo.query.Table;
+import daoo.query.*;
+import tp1.nicolasmoreno.builder.Builder;
+import tp1.nicolasmoreno.exception.BadSyntaxException;
 import tp2.nicolasmoreno.model.IntColumn;
 import tp2.nicolasmoreno.model.StrColumn;
 
@@ -12,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class QueryBuilder {
+public class QueryBuilder implements Builder<Query> {
 
     private Table table;
     private List<Column> columnList;
@@ -36,4 +35,17 @@ public class QueryBuilder {
         return this;
     }
 
+    public QueryBuilder orderBy(Column column) {
+        return this;
+    }
+
+    public QueryBuilder groupBy(Column column) {
+        return this;
+    }
+
+
+    @Override
+    public Query build() throws BadSyntaxException {
+        return null;
+    }
 }
