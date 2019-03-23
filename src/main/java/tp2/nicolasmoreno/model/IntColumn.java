@@ -1,8 +1,11 @@
 package tp2.nicolasmoreno.model;
 
 import daoo.query.Column;
-import daoo.query.visitor.Visitor;
+import daoo.query.Criteria;
+import daoo.query.DefaultOperator;
 import org.jetbrains.annotations.NotNull;
+
+import static daoo.query.Constant.constant;
 
 public class IntColumn implements Column<Integer> {
 
@@ -18,8 +21,13 @@ public class IntColumn implements Column<Integer> {
         return this.name;
     }
 
-    @Override
-    public void accept(@NotNull Visitor visitor) {
+    public Criteria between(Integer min, Integer max) {
+        return new Criteria(DefaultOperator.BETWEEN, constant(this.name),constant(min), constant(max));
+    }
 
+    public Criteria lt(Integer lowerTo) {
+        return new Criteria(DefaultOperator.LT, constant(this.name), constant(lowerTo));
     }
 }
+
+

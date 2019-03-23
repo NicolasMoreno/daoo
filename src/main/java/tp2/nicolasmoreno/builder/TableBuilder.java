@@ -32,7 +32,7 @@ public class TableBuilder implements Table {
 
     @Override
     public void accept(@NotNull Visitor visitor) {
-
+        visitor.visit(this);
     }
 
     public List<Column> getColumnList() {

@@ -1,21 +1,24 @@
 package tp2.nicolasmoreno.builder;
 
 import daoo.query.*;
+import daoo.query.visitor.Visitor;
+import org.jetbrains.annotations.NotNull;
 import tp1.nicolasmoreno.builder.Builder;
-import tp1.nicolasmoreno.exception.BadSyntaxException;
-import tp2.nicolasmoreno.model.IntColumn;
-import tp2.nicolasmoreno.model.StrColumn;
+import tp2.nicolasmoreno.model.QueryImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class QueryBuilder implements Builder<Query> {
+public class QueryBuilder implements Builder<Query>, Query {
 
-    private Table table;
+
     private List<Column> columnList;
-
+    private Table table;
+    private CompoundExpression compoundExpression;
+    private Column orderBy;
+    private Column groupBy;
 
     public QueryBuilder() {
         this.columnList = new ArrayList<>();
@@ -31,21 +34,31 @@ public class QueryBuilder implements Builder<Query> {
         return this;
     }
 
-    public QueryBuilder where(Criteria criteria) {
+    public QueryBuilder where(CompoundExpression expression) {
+        this.compoundExpression = expression;
         return this;
     }
 
     public QueryBuilder orderBy(Column column) {
+        this.orderBy = column;
         return this;
     }
 
     public QueryBuilder groupBy(Column column) {
+        this.groupBy = column;
         return this;
     }
 
+    @Override
+    public Query build() {
+        if (this.columnList.size() == 0 ||
+                table == null ||
+                this.compoundExpression == null) throw new RuntimeException("Syntax Error");
+        return this;
+    }
 
     @Override
-    public Query build() throws BadSyntaxException {
-        return null;
+    public void accept(@NotNull Visitor visitor) {
+        visitor.visit(this);
     }
 }
