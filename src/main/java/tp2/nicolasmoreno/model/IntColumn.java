@@ -28,6 +28,18 @@ public class IntColumn implements Column<Integer> {
     public Criteria lt(Integer lowerTo) {
         return new Criteria(DefaultOperator.LT, constant(this.name), constant(lowerTo));
     }
+
+    public Criteria le(Integer lowerEqualsTo) {
+        return new Criteria(DefaultOperator.LE, constant(this.name), constant(lowerEqualsTo));
+    }
+
+    public Criteria gt(Integer greaterTo) {
+        return new Criteria(DefaultOperator.GT, constant(this.name), constant(greaterTo));
+    }
+
+    public Criteria ge(Integer greaterEqualsTo) {
+        return new Criteria(DefaultOperator.GE, constant(this.name), constant(greaterEqualsTo));
+    }
 }
 
 

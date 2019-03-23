@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 public class QueryBuilder implements Builder<Query>, Query {
 
-
     private List<Column> columnList;
     private Table table;
     private CompoundExpression compoundExpression;

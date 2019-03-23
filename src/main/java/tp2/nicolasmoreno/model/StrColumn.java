@@ -2,7 +2,10 @@ package tp2.nicolasmoreno.model;
 
 import daoo.query.Column;
 import daoo.query.Criteria;
+import daoo.query.DefaultOperator;
 import org.jetbrains.annotations.NotNull;
+
+import static daoo.query.Constant.constant;
 
 public class StrColumn implements Column<String> {
 
@@ -16,8 +19,8 @@ public class StrColumn implements Column<String> {
         return this.name;
     }
 
-    public Criteria startsWith(String comparate) {
-        return this.eq(comparate);
+    public Criteria startsWith(String pattern) {
+        return new Criteria(DefaultOperator.LIKE, constant(this.name), constant(pattern));
     }
 
     public Integer length() {

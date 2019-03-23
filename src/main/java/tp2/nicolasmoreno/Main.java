@@ -11,11 +11,11 @@ public class Main {
     public static void main(String[] args) {
         final Table t = table("student");
         final StrColumn lastName = t.col(string("lastName"));
-        final StrColumn fistName = t.col(string("firstName"));
+        final StrColumn firstName = t.col(string("firstName"));
         final IntColumn age = t.col(integer("age"));
 
-        final Query q = query()
-                .select(age, fistName)
+        /*final Query q = query()
+                .select(age, firstName)
                 .from(t)
                 .where(
                         lastName.startsWith("Lopez")
@@ -24,7 +24,15 @@ public class Main {
                 )
                 .orderBy(age)
                 .groupBy(lastName)
-                .build();
+                .build();*/
+
+        final Query q = query()
+                .select(firstName)
+                .from(t)
+                .where(
+                        lastName.eq("Pepe")
+                        .or(age.ge(30))
+                ).build();
 
 
     }
