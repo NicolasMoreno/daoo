@@ -5,7 +5,6 @@ import daoo.query.Table;
 import nicolasmoreno.tp2.column.DoubleColumn;
 import nicolasmoreno.tp2.column.IntColumn;
 import nicolasmoreno.tp2.column.StrColumn;
-import nicolasmoreno.tp2.impl.QueryImpl;
 import nicolasmoreno.tp3.visitor.SQLVisitor;
 
 import static nicolasmoreno.tp2.factory.BuilderFactory.*;
@@ -23,6 +22,7 @@ public class Main {
                 .from(t)
                 .where(
                         age.avg().ge(21)
+                        .or(age.between(18,25)).and(lastName.eq("Pepe"))
                 )
                 .orderBy(marksAvg.avg().desc(), firstName.asc())
                 .groupBy(lastName, firstName)
@@ -37,8 +37,7 @@ public class Main {
                 ).build();
 
         final SQLVisitor sqlVisitor = new SQLVisitor();
-        final QueryImpl query = (QueryImpl)q1;
-        query.accept(sqlVisitor);
+        q1.accept(sqlVisitor);
         System.out.println(sqlVisitor.getSqlQuery());
 
     }

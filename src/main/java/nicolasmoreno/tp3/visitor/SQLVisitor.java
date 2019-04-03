@@ -13,11 +13,9 @@ import java.util.List;
 public class SQLVisitor implements Visitor {
 
     private String sqlQuery;
-    private boolean printingOrderBy;
 
     public SQLVisitor() {
         this.sqlQuery = "";
-        this.printingOrderBy = false;
     }
 
     public String getSqlQuery() {
@@ -26,7 +24,7 @@ public class SQLVisitor implements Visitor {
 
     @Override
     public void visit(@NotNull Query query) {
-        final QueryImpl queryImpl = (QueryImpl) query;
+        final QueryImpl queryImpl = (QueryImpl) query; // NO HAY QUE CASTEAR
         queryImpl.getClause().accept(this);
         this.iterativeVisit(queryImpl.getColumnList(), 0);
         queryImpl.getFromClause().accept(this);
@@ -34,7 +32,6 @@ public class SQLVisitor implements Visitor {
         queryImpl.getWhereClause().accept(this);
         queryImpl.getCompoundExpression().accept(this);
         queryImpl.getOrderByClause().accept(this);
-        this.printingOrderBy = true;
         int index = 0;
         for (OrderByExpression exp: queryImpl.getOrderBy()) {
             exp.accept(this);
@@ -85,9 +82,6 @@ public class SQLVisitor implements Visitor {
                 if (i+1 == expression.getOperands().length) {
                     this.sqlQuery += expression.getOperator().getTemplate()[i+1];
                 }
-                /*if (printingOrderBy) {
-                    this.sqlQuery += " " + expression.getOperator().getTemplate()[i+1];
-                }*/
             }
     }
 
