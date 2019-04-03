@@ -17,11 +17,22 @@ public class SQLVisitor implements Visitor {
         this.sqlQuery = "";
     }
 
+    public String getSqlQuery() {
+        return sqlQuery;
+    }
+
     @Override
     public void visit(@NotNull Query query) {
         final QueryImpl queryImpl = (QueryImpl) query;
         queryImpl.getClause().accept(this);
-        queryImpl.getColumnList().forEach( column -> column.accept(this));
+        int iterationIndex = 0;
+        for (Column col: queryImpl.getColumnList()) {
+            col.accept(this);
+            if (iterationIndex < queryImpl.getColumnList().size() - 1) {
+                this.sqlQuery += ", ";
+            }
+            iterationIndex++;
+        }
         queryImpl.getFromClause().accept(this);
         queryImpl.getTable().accept(this);
         queryImpl.getWhereClause().accept(this);
@@ -31,7 +42,7 @@ public class SQLVisitor implements Visitor {
 
     @Override
     public void visit(@NotNull Column<?> column) {
-        this.sqlQuery += column.getName() + ", ";
+        this.sqlQuery += column.getName();
     }
 
     @Override
@@ -42,60 +53,44 @@ public class SQLVisitor implements Visitor {
 
     @Override
     public void visit(@NotNull Constant<?> constant) {
-        System.out.println(constant);
+        final Object value = constant.getValue();
+        if (value instanceof String) {
+            this.sqlQuery += "'" + constant.getValue().toString() + "'";
+        } else if (value instanceof Number) {
+            this.sqlQuery += constant.getValue().toString();
+        }
     }
 
     @Override
     public void visit(@NotNull CompoundExpression<?> expression) {
 //        this.iterativeVisit(expression);
-        System.out.println(expression);
-    }
-
-    /*private String iterativeVisit(@NotNull CompoundExpression<?> compoundExpression) {
-        final String[] template = compoundExpression.getOperator().getTemplate();
-        switch ((DefaultOperator)compoundExpression.getOperator()) {
+        for (int i = 0; i < expression.getOperator().getArity(); i++) {
+                this.sqlQuery += expression.getOperator().getTemplate()[i];
+                (expression.getOperands()[i]).accept(this);
+            }
+        /*switch ((DefaultOperator)expression.getOperator()) {
             case AND: {
-                template[2] = this.iterativeVisit((Criteria)compoundExpression.getOperands()[1]);
-                template[0] = this.iterativeVisit((Criteria)compoundExpression.getOperands()[0]);
+                (expression.getOperands()[0]).accept(this);
+                this.sqlQuery += expression.getOperator().getTemplate()[1];
+                (expression.getOperands()[1]).accept(this);
                 break;
             }
-            case OR: {
+            case EQ: {
+                (expression.getOperands()[0]).accept(this);
+                this.sqlQuery += expression.getOperator().getTemplate()[1];
+                (expression.getOperands()[1]).accept(this);
                 break;
             }
-            case NOT: {
+            case BETWEEN: {
+                (expression.getOperands()[0]).accept(this);
+                this.sqlQuery += expression.getOperator().getTemplate()[1];
+                (expression.getOperands()[1]).accept(this);
+                this.sqlQuery += expression.getOperator().getTemplate()[2];
+                (expression.getOperands()[2]).accept(this);
                 break;
             }
-            case GE: {
-                return this.processData(compoundExpression, template);
-            }
-            case LT: {
-                return this.processData(compoundExpression, template);
-            }
-            case AVG: {
-                template[0] += ((IntColumn)compoundExpression.getOperands()[0]).getName();
-                return template[0].concat(template[1]);
-            }
-        }
-        return "";
+        }*/
     }
-
-    private String processData(CompoundExpression<?> compoundExpression, String[] template) {
-        if (compoundExpression.getOperands()[1] instanceof Constant) {
-            template[2] = this.iterativeVisit((Constant)compoundExpression.getOperands()[1]);
-        } else {
-            template[2] = this.iterativeVisit((CompoundExpression<?>)compoundExpression.getOperands()[1]);
-        }
-        if (compoundExpression.getOperands()[0] instanceof Column) {
-            template[0] = ((Column)compoundExpression.getOperands()[0]).getName();
-        } else {
-            template[0] = this.iterativeVisit((CompoundExpression<?>) compoundExpression.getOperands()[0]);
-        }
-        return template[0].concat(template[1]).concat(template[2]);
-    }
-
-    private String iterativeVisit(@NotNull Constant constant) {
-        return ((Integer)constant.getValue()).toString();
-    }*/
 
     @Override
     public void visit(@NotNull Clause<?> clause) {

@@ -24,6 +24,7 @@ public class Main {
                 .where(
                         lastName.eq("Pepe")
                         .and(age.between(18, 21))
+                        .and(marksAvg.gt(8.4))
                 )
                 .orderBy(marksAvg.avg().desc(), firstName.asc())
                 .groupBy(lastName)
@@ -40,6 +41,7 @@ public class Main {
         final SQLVisitor sqlVisitor = new SQLVisitor();
         final QueryImpl query = (QueryImpl)q1;
         query.accept(sqlVisitor);
+        System.out.println(sqlVisitor.getSqlQuery());
 
     }
 }
