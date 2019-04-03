@@ -1,10 +1,10 @@
 package nicolasmoreno.tp2.factory;
 
 import nicolasmoreno.tp2.builder.QueryBuilder;
-import nicolasmoreno.tp2.model.impl.TableImpl;
-import nicolasmoreno.tp2.model.column.DoubleColumn;
-import nicolasmoreno.tp2.model.column.IntColumn;
-import nicolasmoreno.tp2.model.column.StrColumn;
+import nicolasmoreno.tp2.impl.TableImpl;
+import nicolasmoreno.tp2.column.DoubleColumn;
+import nicolasmoreno.tp2.column.IntColumn;
+import nicolasmoreno.tp2.column.StrColumn;
 
 public class BuilderFactory {
 

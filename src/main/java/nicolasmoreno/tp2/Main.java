@@ -2,9 +2,11 @@ package nicolasmoreno.tp2;
 
 import daoo.query.Query;
 import daoo.query.Table;
-import nicolasmoreno.tp2.model.column.DoubleColumn;
-import nicolasmoreno.tp2.model.column.IntColumn;
-import nicolasmoreno.tp2.model.column.StrColumn;
+import nicolasmoreno.tp2.column.DoubleColumn;
+import nicolasmoreno.tp2.column.IntColumn;
+import nicolasmoreno.tp2.column.StrColumn;
+import nicolasmoreno.tp2.impl.QueryImpl;
+import nicolasmoreno.tp3.visitor.SQLVisitor;
 
 import static nicolasmoreno.tp2.factory.BuilderFactory.*;
 
@@ -14,17 +16,16 @@ public class Main {
         final StrColumn lastName = t.col(string("lastName"));
         final StrColumn firstName = t.col(string("firstName"));
         final IntColumn age = t.col(integer("age"));
-        final DoubleColumn calificationAvg = t.col(doubleCol("average"));
+        final DoubleColumn marksAvg = t.col(doubleCol("marksAvg"));
 
         final Query q1 = query()
                 .select(age, firstName)
                 .from(t)
                 .where(
-                        lastName.startsWith("Lopez")
+                        lastName.eq("Pepe")
                         .and(age.between(18, 21))
-                        .and(age.lt(firstName.length())) // Mal
                 )
-                .orderBy(age)
+                .orderBy(marksAvg.avg().desc(), firstName.asc())
                 .groupBy(lastName)
                 .build();
 
@@ -36,10 +37,9 @@ public class Main {
                         .or(age.ge(30))
                 ).build();
 
-        System.out.println(
-                "Hello"
-        );
-
+        final SQLVisitor sqlVisitor = new SQLVisitor();
+        final QueryImpl query = (QueryImpl)q1;
+        query.accept(sqlVisitor);
 
     }
 }

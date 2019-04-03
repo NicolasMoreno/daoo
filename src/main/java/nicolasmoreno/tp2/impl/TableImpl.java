@@ -1,4 +1,4 @@
-package nicolasmoreno.tp2.model.impl;
+package nicolasmoreno.tp2.impl;
 
 import daoo.query.Column;
 import daoo.query.Table;

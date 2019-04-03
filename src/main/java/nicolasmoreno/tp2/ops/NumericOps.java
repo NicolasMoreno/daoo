@@ -1,9 +1,9 @@
-package nicolasmoreno.tp2.model.ops;
+package nicolasmoreno.tp2.ops;
 
 import daoo.query.Criteria;
 import daoo.query.DefaultOperator;
 import daoo.query.Expression;
-import nicolasmoreno.tp2.model.expr.NumericExpression;
+import nicolasmoreno.tp2.expr.NumericExpression;
 
 import static daoo.query.Constant.constant;
 

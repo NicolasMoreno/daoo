@@ -1,14 +1,17 @@
-package nicolasmoreno.tp2.model.column;
+package nicolasmoreno.tp2.column;
 
 import daoo.query.Column;
 import daoo.query.Criteria;
 import daoo.query.DefaultOperator;
+import nicolasmoreno.tp2.expr.OrderByExpression;
+import nicolasmoreno.tp2.operator.SortingOperator;
+import nicolasmoreno.tp2.ops.Sortable;
 import org.jetbrains.annotations.NotNull;
-import nicolasmoreno.tp2.model.expr.NumericExpression;
+import nicolasmoreno.tp2.expr.NumericExpression;
 
 import static daoo.query.Constant.constant;
 
-public class StrColumn implements Column<String> {
+public class StrColumn implements Column<String>, Sortable<String> {
 
     private String name;
 
@@ -28,4 +31,13 @@ public class StrColumn implements Column<String> {
         return new NumericExpression<>(DefaultOperator.STRING_LENGTH, this);
     }
 
+    @Override
+    public OrderByExpression<String> asc() {
+        return new OrderByExpression<>(SortingOperator.ASC, this);
+    }
+
+    @Override
+    public OrderByExpression<String> desc() {
+        return new OrderByExpression<>(SortingOperator.DESC, this);
+    }
 }

@@ -1,4 +1,4 @@
-package nicolasmoreno.tp2.model.column;
+package nicolasmoreno.tp2.column;
 
 public class IntColumn extends NumericColumn<Integer> {
 

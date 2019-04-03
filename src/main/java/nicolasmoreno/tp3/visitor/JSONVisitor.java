@@ -4,10 +4,7 @@ import daoo.query.*;
 import daoo.query.visitor.Visitor;
 import org.jetbrains.annotations.NotNull;
 
-public class VisitorImpl implements Visitor {
-
-
-
+public class JSONVisitor implements Visitor {
 
     @Override
     public void visit(@NotNull Query query) {
