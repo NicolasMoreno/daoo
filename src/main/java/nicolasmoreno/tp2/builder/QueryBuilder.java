@@ -1,9 +1,7 @@
 package nicolasmoreno.tp2.builder;
 
 import daoo.query.*;
-import nicolasmoreno.tp2.clause.FromClause;
-import nicolasmoreno.tp2.clause.SelectClause;
-import nicolasmoreno.tp2.clause.WhereClause;
+import nicolasmoreno.tp2.clause.*;
 import nicolasmoreno.tp2.expr.OrderByExpression;
 import nicolasmoreno.tp2.impl.QueryImpl;
 import nicolasmoreno.tp1.builder.Builder;
@@ -62,11 +60,13 @@ public class QueryBuilder implements Builder<Query> {
     }
 
     public QueryBuilder orderBy(OrderByExpression... expressions) {
+        this.orderByClause = new OrderByClause();
         this.orderBy = Arrays.stream(expressions).collect(Collectors.toList());
         return this;
     }
 
     public QueryBuilder groupBy(Column... columns) {
+        this.groupByClause = new GroupByClause();
         this.groupBy = Arrays.stream(columns).collect(Collectors.toList());
         return this;
     }
@@ -76,6 +76,6 @@ public class QueryBuilder implements Builder<Query> {
         if (this.columnList.size() == 0 ||
                 table == null ||
                 this.compoundExpression == null) throw new RuntimeException("Syntax Error");
-        return new QueryImpl(this.statementClause, this.fromClause, this.whereClause, this.columnList, this.table, this.compoundExpression, this.orderBy, this.groupBy);
+        return new QueryImpl(this.statementClause, this.fromClause, this.whereClause, this.orderByClause, this.groupByClause, this.columnList, this.table, this.compoundExpression, this.orderBy, this.groupBy);
     }
 }

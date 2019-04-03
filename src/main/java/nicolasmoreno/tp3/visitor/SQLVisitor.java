@@ -1,20 +1,23 @@
 package nicolasmoreno.tp3.visitor;
 
 import daoo.query.*;
+import daoo.query.visitor.Visitable;
 import daoo.query.visitor.Visitor;
-import nicolasmoreno.tp2.clause.FromClause;
-import nicolasmoreno.tp2.clause.SelectClause;
-import nicolasmoreno.tp2.clause.WhereClause;
-import nicolasmoreno.tp2.column.IntColumn;
+import nicolasmoreno.tp2.clause.*;
+import nicolasmoreno.tp2.expr.OrderByExpression;
 import nicolasmoreno.tp2.impl.QueryImpl;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class SQLVisitor implements Visitor {
 
     private String sqlQuery;
+    private boolean printingOrderBy;
 
     public SQLVisitor() {
         this.sqlQuery = "";
+        this.printingOrderBy = false;
     }
 
     public String getSqlQuery() {
@@ -25,19 +28,33 @@ public class SQLVisitor implements Visitor {
     public void visit(@NotNull Query query) {
         final QueryImpl queryImpl = (QueryImpl) query;
         queryImpl.getClause().accept(this);
-        int iterationIndex = 0;
-        for (Column col: queryImpl.getColumnList()) {
-            col.accept(this);
-            if (iterationIndex < queryImpl.getColumnList().size() - 1) {
-                this.sqlQuery += ", ";
-            }
-            iterationIndex++;
-        }
+        this.iterativeVisit(queryImpl.getColumnList(), 0);
         queryImpl.getFromClause().accept(this);
         queryImpl.getTable().accept(this);
         queryImpl.getWhereClause().accept(this);
         queryImpl.getCompoundExpression().accept(this);
-        System.out.println(query);
+        queryImpl.getOrderByClause().accept(this);
+        this.printingOrderBy = true;
+        int index = 0;
+        for (OrderByExpression exp: queryImpl.getOrderBy()) {
+            exp.accept(this);
+            if (index < queryImpl.getOrderBy().size() - 1) {
+                this.sqlQuery += ", ";
+            }
+            index++;
+        }
+        queryImpl.getGroupByClause().accept(this);
+        this.iterativeVisit(queryImpl.getGroupBy(), 0);
+    }
+
+    private void iterativeVisit(List<Column> columnList, int i) {
+        for (Visitable col: columnList) {
+            col.accept(this);
+            if (i < columnList.size() - 1) {
+                this.sqlQuery += ", ";
+            }
+            i++;
+        }
     }
 
     @Override
@@ -48,7 +65,6 @@ public class SQLVisitor implements Visitor {
     @Override
     public void visit(@NotNull Table table) {
         this.sqlQuery += table.getName();
-        System.out.println(table);
     }
 
     @Override
@@ -63,33 +79,16 @@ public class SQLVisitor implements Visitor {
 
     @Override
     public void visit(@NotNull CompoundExpression<?> expression) {
-//        this.iterativeVisit(expression);
         for (int i = 0; i < expression.getOperator().getArity(); i++) {
                 this.sqlQuery += expression.getOperator().getTemplate()[i];
                 (expression.getOperands()[i]).accept(this);
+                if (i+1 == expression.getOperands().length) {
+                    this.sqlQuery += expression.getOperator().getTemplate()[i+1];
+                }
+                /*if (printingOrderBy) {
+                    this.sqlQuery += " " + expression.getOperator().getTemplate()[i+1];
+                }*/
             }
-        /*switch ((DefaultOperator)expression.getOperator()) {
-            case AND: {
-                (expression.getOperands()[0]).accept(this);
-                this.sqlQuery += expression.getOperator().getTemplate()[1];
-                (expression.getOperands()[1]).accept(this);
-                break;
-            }
-            case EQ: {
-                (expression.getOperands()[0]).accept(this);
-                this.sqlQuery += expression.getOperator().getTemplate()[1];
-                (expression.getOperands()[1]).accept(this);
-                break;
-            }
-            case BETWEEN: {
-                (expression.getOperands()[0]).accept(this);
-                this.sqlQuery += expression.getOperator().getTemplate()[1];
-                (expression.getOperands()[1]).accept(this);
-                this.sqlQuery += expression.getOperator().getTemplate()[2];
-                (expression.getOperands()[2]).accept(this);
-                break;
-            }
-        }*/
     }
 
     @Override
@@ -100,6 +99,10 @@ public class SQLVisitor implements Visitor {
             this.sqlQuery += ((FromClause) clause).getTemplate();
         } else if (clause instanceof WhereClause) {
             this.sqlQuery += ((WhereClause) clause).getTemplate();
+        } else if (clause instanceof GroupByClause) {
+            this.sqlQuery += ((GroupByClause) clause).getTemplate();
+        } else if (clause instanceof OrderByClause) {
+            this.sqlQuery += ((OrderByClause) clause).getTemplate();
         }
     }
 }

@@ -5,8 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 public enum SortingOperator implements Operator {
 
-    ASC("", "ASC"),
-    DESC("", "DESC");
+    ASC("", " ASC"),
+    DESC("", " DESC");
 
     @NotNull private final String[] template;
 

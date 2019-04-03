@@ -22,12 +22,10 @@ public class Main {
                 .select(age, firstName)
                 .from(t)
                 .where(
-                        lastName.eq("Pepe")
-                        .and(age.between(18, 21))
-                        .and(marksAvg.gt(8.4))
+                        age.avg().ge(21)
                 )
                 .orderBy(marksAvg.avg().desc(), firstName.asc())
-                .groupBy(lastName)
+                .groupBy(lastName, firstName)
                 .build();
 
         final Query q = query()

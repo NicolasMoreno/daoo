@@ -20,12 +20,14 @@ public class QueryImpl implements Query {
     private List<OrderByExpression> orderBy;
     private List<Column> groupBy;
 
-    public QueryImpl(Clause clause, Clause fromClause, Clause whereClause, List<Column> columnList, Table table,
+    public QueryImpl(Clause clause, Clause fromClause, Clause whereClause, Clause orderByClause, Clause groupByClause, List<Column> columnList, Table table,
                      CompoundExpression compoundExpression,
                      List<OrderByExpression> orderBy, List<Column> groupBy) {
         this.clause = clause;
         this.fromClause = fromClause;
         this.whereClause = whereClause;
+        this.orderByClause = orderByClause;
+        this.groupByClause = groupByClause;
         this.columnList = columnList;
         this.table = table;
         this.compoundExpression = compoundExpression;
@@ -63,6 +65,14 @@ public class QueryImpl implements Query {
 
     public Clause getWhereClause() {
         return whereClause;
+    }
+
+    public Clause getOrderByClause() {
+        return orderByClause;
+    }
+
+    public Clause getGroupByClause() {
+        return groupByClause;
     }
 
     @Override
