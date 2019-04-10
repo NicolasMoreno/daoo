@@ -64,7 +64,7 @@ public class SQLVisitor implements Visitor {
                 if (i+1 == expression.getOperands().length) {
                     this.sqlQuery.append(expression.getOperator().getTemplate()[i+1]);
                 }
-            }
+        }
     }
 
     @Override

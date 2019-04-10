@@ -5,6 +5,7 @@ import daoo.query.Table;
 import nicolasmoreno.tp2.column.DoubleColumn;
 import nicolasmoreno.tp2.column.IntColumn;
 import nicolasmoreno.tp2.column.StrColumn;
+import nicolasmoreno.tp3.visitor.JSONVisitor;
 import nicolasmoreno.tp3.visitor.SQLVisitor;
 
 import static nicolasmoreno.tp2.factory.BuilderFactory.*;
@@ -37,10 +38,13 @@ public class Main {
                 ).build();
 
         final SQLVisitor sqlVisitor = new SQLVisitor();
+        final JSONVisitor jsonVisitor = new JSONVisitor();
         q1.accept(sqlVisitor);
         System.out.println(sqlVisitor.getSqlQuery());
         q.accept(sqlVisitor);
         System.out.println(sqlVisitor.getSqlQuery());
+        q1.accept(jsonVisitor);
+        System.out.println(jsonVisitor.getJsonObject());
 
     }
 }
