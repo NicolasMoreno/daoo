@@ -12,43 +12,28 @@ import java.util.List;
 
 public class SQLVisitor implements Visitor {
 
-    private String sqlQuery;
+    private StringBuilder sqlQuery;
 
     public SQLVisitor() {
-        this.sqlQuery = "";
+        this.sqlQuery = new StringBuilder();
     }
 
     public String getSqlQuery() {
-        return sqlQuery;
+        return sqlQuery.toString();
     }
 
     @Override
     public void visit(@NotNull Query query) {
-        final QueryImpl queryImpl = (QueryImpl) query; // NO HAY QUE CASTEAR
-        queryImpl.getClause().accept(this);
-        this.iterativeVisit(queryImpl.getColumnList(), 0);
-        queryImpl.getFromClause().accept(this);
-        queryImpl.getTable().accept(this);
-        queryImpl.getWhereClause().accept(this);
-        queryImpl.getCompoundExpression().accept(this);
-        queryImpl.getOrderByClause().accept(this);
-        int index = 0;
-        for (OrderByExpression exp: queryImpl.getOrderBy()) {
-            exp.accept(this);
-            if (index < queryImpl.getOrderBy().size() - 1) {
-                this.sqlQuery += ", ";
-            }
-            index++;
-        }
-        queryImpl.getGroupByClause().accept(this);
-        this.iterativeVisit(queryImpl.getGroupBy(), 0);
+        final QueryImpl queryImpl = (QueryImpl) query;
+        queryImpl.getClauses().forEach( clause -> clause.accept(this));
     }
 
-    private void iterativeVisit(List<Column> columnList, int i) {
+    private void iterativeVisit(List<? extends Visitable> columnList) {
+        int i = 0;
         for (Visitable col: columnList) {
             col.accept(this);
             if (i < columnList.size() - 1) {
-                this.sqlQuery += ", ";
+                this.sqlQuery.append(", ");
             }
             i++;
         }
@@ -56,31 +41,31 @@ public class SQLVisitor implements Visitor {
 
     @Override
     public void visit(@NotNull Column<?> column) {
-        this.sqlQuery += column.getName();
+        sqlQuery.append(column.getName());
     }
 
     @Override
     public void visit(@NotNull Table table) {
-        this.sqlQuery += table.getName();
+        sqlQuery.append(table.getName());
     }
 
     @Override
     public void visit(@NotNull Constant<?> constant) {
         final Object value = constant.getValue();
         if (value instanceof String) {
-            this.sqlQuery += "'" + constant.getValue().toString() + "'";
+            this.sqlQuery.append("'").append(constant.getValue().toString()).append("'");
         } else if (value instanceof Number) {
-            this.sqlQuery += constant.getValue().toString();
+            this.sqlQuery.append(constant.getValue().toString());
         }
     }
 
     @Override
     public void visit(@NotNull CompoundExpression<?> expression) {
         for (int i = 0; i < expression.getOperator().getArity(); i++) {
-                this.sqlQuery += expression.getOperator().getTemplate()[i];
+                this.sqlQuery.append(expression.getOperator().getTemplate()[i]);
                 (expression.getOperands()[i]).accept(this);
                 if (i+1 == expression.getOperands().length) {
-                    this.sqlQuery += expression.getOperator().getTemplate()[i+1];
+                    this.sqlQuery.append(expression.getOperator().getTemplate()[i+1]);
                 }
             }
     }
@@ -88,15 +73,26 @@ public class SQLVisitor implements Visitor {
     @Override
     public void visit(@NotNull Clause<?> clause) {
         if (clause instanceof SelectClause) {
-            this.sqlQuery += ((SelectClause) clause).getTemplate();
+            final SelectClause select = (SelectClause) clause;
+            sqlQuery.append(select.getTemplate());
+            iterativeVisit(select.getColumnList());
         } else if (clause instanceof FromClause) {
-            this.sqlQuery += ((FromClause) clause).getTemplate();
+            final FromClause fromClause = (FromClause) clause;
+            sqlQuery.append(fromClause.getTemplate());
+            fromClause.getTable().accept(this);
         } else if (clause instanceof WhereClause) {
-            this.sqlQuery += ((WhereClause) clause).getTemplate();
+            final WhereClause whereClause = (WhereClause) clause;
+            sqlQuery.append(whereClause.getTemplate());
+            whereClause.getCompoundExpression().accept(this);
         } else if (clause instanceof GroupByClause) {
-            this.sqlQuery += ((GroupByClause) clause).getTemplate();
+            final GroupByClause orderBy = (GroupByClause) clause;
+            sqlQuery.append(orderBy.getTemplate());
+            iterativeVisit(orderBy.getGroupBy());
         } else if (clause instanceof OrderByClause) {
-            this.sqlQuery += ((OrderByClause) clause).getTemplate();
+            final OrderByClause orderByClause = (OrderByClause) clause;
+            sqlQuery.append(orderByClause.getTemplate());
+            iterativeVisit(orderByClause.getOrderBy());
+
         }
     }
 }
