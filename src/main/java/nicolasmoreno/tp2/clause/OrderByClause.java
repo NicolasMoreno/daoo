@@ -7,7 +7,6 @@ import java.util.List;
 
 public class OrderByClause implements Clause<String> {
 
-    private final String template = " ORDER BY ";
     private List<OrderByExpression> orderBy;
 
     public OrderByClause(List<OrderByExpression> orderBy) {
@@ -18,7 +17,4 @@ public class OrderByClause implements Clause<String> {
         return orderBy;
     }
 
-    public String getTemplate() {
-        return template;
-    }
 }

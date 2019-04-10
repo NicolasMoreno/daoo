@@ -4,17 +4,15 @@ import daoo.query.*;
 import daoo.query.visitor.Visitor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class QueryImpl implements Query {
 
     private List<Clause> clauses;
 
-    public QueryImpl(Clause... clauses) {
-        this.clauses = Arrays.stream(clauses).collect(Collectors.toList());
+    public QueryImpl(List<Clause> clauses) {
+        this.clauses = clauses;
     }
 
     public Iterable<Clause> getClauses() {

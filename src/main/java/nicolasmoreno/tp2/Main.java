@@ -39,6 +39,8 @@ public class Main {
         final SQLVisitor sqlVisitor = new SQLVisitor();
         q1.accept(sqlVisitor);
         System.out.println(sqlVisitor.getSqlQuery());
+        q.accept(sqlVisitor);
+        System.out.println(sqlVisitor.getSqlQuery());
 
     }
 }

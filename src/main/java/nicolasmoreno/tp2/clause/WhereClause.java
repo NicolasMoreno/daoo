@@ -6,7 +6,6 @@ import daoo.query.Table;
 
 public class WhereClause implements Clause<String> {
 
-    private final String template = " WHERE ";
     private CompoundExpression compoundExpression;
 
     public WhereClause(CompoundExpression compoundExpression) {
@@ -17,7 +16,4 @@ public class WhereClause implements Clause<String> {
         return compoundExpression;
     }
 
-    public String getTemplate() {
-        return template;
-    }
 }

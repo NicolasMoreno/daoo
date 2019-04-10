@@ -14,16 +14,13 @@ public class SQLVisitor implements Visitor {
 
     private StringBuilder sqlQuery;
 
-    public SQLVisitor() {
-        this.sqlQuery = new StringBuilder();
-    }
-
     public String getSqlQuery() {
         return sqlQuery.toString();
     }
 
     @Override
     public void visit(@NotNull Query query) {
+        sqlQuery = new StringBuilder();
         final QueryImpl queryImpl = (QueryImpl) query;
         queryImpl.getClauses().forEach( clause -> clause.accept(this));
     }
@@ -74,25 +71,24 @@ public class SQLVisitor implements Visitor {
     public void visit(@NotNull Clause<?> clause) {
         if (clause instanceof SelectClause) {
             final SelectClause select = (SelectClause) clause;
-            sqlQuery.append(select.getTemplate());
+            sqlQuery.append("SELECT ");
             iterativeVisit(select.getColumnList());
         } else if (clause instanceof FromClause) {
             final FromClause fromClause = (FromClause) clause;
-            sqlQuery.append(fromClause.getTemplate());
+            sqlQuery.append(" FROM ");
             fromClause.getTable().accept(this);
         } else if (clause instanceof WhereClause) {
             final WhereClause whereClause = (WhereClause) clause;
-            sqlQuery.append(whereClause.getTemplate());
+            sqlQuery.append(" WHERE ");
             whereClause.getCompoundExpression().accept(this);
         } else if (clause instanceof GroupByClause) {
             final GroupByClause orderBy = (GroupByClause) clause;
-            sqlQuery.append(orderBy.getTemplate());
+            sqlQuery.append(" GROUP BY ");
             iterativeVisit(orderBy.getGroupBy());
         } else if (clause instanceof OrderByClause) {
             final OrderByClause orderByClause = (OrderByClause) clause;
-            sqlQuery.append(orderByClause.getTemplate());
+            sqlQuery.append(" ORDER BY ");
             iterativeVisit(orderByClause.getOrderBy());
-
         }
     }
 }

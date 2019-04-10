@@ -7,7 +7,6 @@ import java.util.List;
 
 public class GroupByClause implements Clause<String> {
 
-    private final String template = " GROUP BY ";
     private List<Column> groupBy;
 
     public GroupByClause(List<Column> groupBy) {
@@ -18,7 +17,4 @@ public class GroupByClause implements Clause<String> {
         return groupBy;
     }
 
-    public String getTemplate() {
-        return template;
-    }
 }

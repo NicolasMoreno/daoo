@@ -4,7 +4,6 @@ import daoo.query.Clause;
 import daoo.query.Table;
 
 public class FromClause implements Clause<String> {
-    private final String template = " FROM ";
     private Table table;
 
     public FromClause(Table table) {
@@ -15,7 +14,4 @@ public class FromClause implements Clause<String> {
         return table;
     }
 
-    public String getTemplate() {
-        return template;
-    }
 }

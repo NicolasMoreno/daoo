@@ -21,6 +21,8 @@ public class QueryBuilder implements Builder<Query> {
 
     public QueryBuilder() {
         this.columnList = new ArrayList<>();
+        orderBy = new ArrayList<>();
+        groupBy = new ArrayList<>();
     }
 
     public QueryBuilder select(Column... columns) {
@@ -66,11 +68,12 @@ public class QueryBuilder implements Builder<Query> {
         if (this.columnList.size() == 0 ||
                 table == null ||
                 this.compoundExpression == null) throw new RuntimeException("Syntax Error");
-        final SelectClause selectClause = new SelectClause(this.columnList);
-        final FromClause fromClause = new FromClause(this.table);
-        final WhereClause whereClause= new WhereClause(this.compoundExpression);
-        final OrderByClause orderByClause = new OrderByClause(this.orderBy);
-        final GroupByClause groupByClause = new GroupByClause(this.groupBy);
-        return new QueryImpl(selectClause, fromClause, whereClause, orderByClause, groupByClause);
+        final List<Clause> clauses = new ArrayList<>();
+        clauses.add(new SelectClause(this.columnList));
+        clauses.add(new FromClause(this.table));
+        clauses.add(new WhereClause(this.compoundExpression));
+        if (this.orderBy.size() > 0) clauses.add(new OrderByClause(this.orderBy));
+        if (this.groupBy.size() > 0) clauses.add(new GroupByClause(this.groupBy));
+        return new QueryImpl(clauses);
     }
 }

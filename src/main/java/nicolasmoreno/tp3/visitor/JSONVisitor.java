@@ -2,6 +2,8 @@ package nicolasmoreno.tp3.visitor;
 
 import daoo.query.*;
 import daoo.query.visitor.Visitor;
+import nicolasmoreno.tp2.clause.*;
+import nicolasmoreno.tp2.impl.QueryImpl;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -15,7 +17,8 @@ public class JSONVisitor implements Visitor {
 
     @Override
     public void visit(@NotNull Query query) {
-
+        final QueryImpl queryImpl = (QueryImpl) query;
+        queryImpl.getClauses().forEach( clause -> clause.accept(this));
     }
 
     @Override
@@ -40,6 +43,21 @@ public class JSONVisitor implements Visitor {
 
     @Override
     public void visit(@NotNull Clause<?> clause) {
+        if (clause instanceof SelectClause) {
+            final SelectClause select = (SelectClause) clause;
 
+        } else if (clause instanceof FromClause) {
+            final FromClause fromClause = (FromClause) clause;
+
+        } else if (clause instanceof WhereClause) {
+            final WhereClause whereClause = (WhereClause) clause;
+
+        } else if (clause instanceof GroupByClause) {
+            final GroupByClause orderBy = (GroupByClause) clause;
+
+        } else if (clause instanceof OrderByClause) {
+            final OrderByClause orderByClause = (OrderByClause) clause;
+
+        }
     }
 }
