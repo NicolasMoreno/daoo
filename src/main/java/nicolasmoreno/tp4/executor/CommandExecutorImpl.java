@@ -7,9 +7,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class CommandExecutorImpl implements CommandExecutor {
 
+    private OperandStack globalOperandStack;
+
     @Override
     public OperandStack execute(@NotNull Command command) {
-        return null;
+        return command.execute(globalOperandStack);
     }
 
     @Override
