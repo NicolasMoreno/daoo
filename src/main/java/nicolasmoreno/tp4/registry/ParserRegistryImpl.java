@@ -35,21 +35,13 @@ public class ParserRegistryImpl implements ParserRegistry {
     public Command match(@NotNull String line) {
         for (Parser<Operand> operandParser: operandParserList) {
             if (operandParser.test(line)) {
-                final Operand foundCommand = operandParser.apply(line);
-                return new OperandCommand(foundCommand);
+                final Operand foundOperand = operandParser.apply(line);
+                return new OperandCommand(foundOperand);
             }
         }
         for (Parser<Command> commandParser: commandParserList) {
             if (commandParser.test(line)) return commandParser.apply(line);
         }
         return Command.EMPTY_COMMAND;
-        /*operandParserList.forEach( operandParser -> {
-            if (operandParser.test(line)) {
-                return operandParser.apply(line);
-            }
-        });
-        commandParserList.forEach( commandParser -> {
-            commandParser.apply(line);
-        });*/
     }
 }

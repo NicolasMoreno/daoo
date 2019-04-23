@@ -5,7 +5,7 @@ import daoo.repl.Operand;
 import nicolasmoreno.tp4.command.OperandCommand;
 import org.jetbrains.annotations.NotNull;
 
-public class OperandImpl<V> implements Operand {
+public class OperandImpl implements Operand {
 
     private Object value;
 
@@ -15,11 +15,7 @@ public class OperandImpl<V> implements Operand {
 
     @Override
     public <T> T as(@NotNull Class<T> type) {
-        if (type.isInstance(Command.class) ) {
-            return type.cast(value);
-        } else {
-            return null;
-        }
+        return type.cast(value);
     }
 
     @Override

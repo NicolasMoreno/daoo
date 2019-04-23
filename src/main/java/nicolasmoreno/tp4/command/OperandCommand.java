@@ -18,7 +18,7 @@ public class OperandCommand implements Command {
 
     @Override
     public OperandStack execute(@NotNull OperandStack stack) {
-        this.lastStack = stack;
+        this.lastStack = stack.push(operand);
         return lastStack;
     }
 

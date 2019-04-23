@@ -15,6 +15,9 @@ public class ReplImpl extends Repl {
     @Override
     void loop(@NotNull InputStream input, @NotNull OutputStream output) {
         final Scanner scanner = new Scanner(input);
-        System.out.println(scanner.next());
+        while (scanner.hasNext(".+")) {
+            final Command command = parsers.match(scanner.nextLine());
+            executor.execute(command);
+        }
     }
 }

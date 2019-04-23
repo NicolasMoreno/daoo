@@ -11,7 +11,7 @@ public class CommandExecutorImpl implements CommandExecutor {
 
     @Override
     public OperandStack execute(@NotNull Command command) {
-        return command.execute(globalOperandStack);
+        return command.execute(globalOperandStack); //TODO globalOperandStack is null;
     }
 
     @Override
