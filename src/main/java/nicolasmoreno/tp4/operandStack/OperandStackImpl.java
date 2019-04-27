@@ -17,14 +17,14 @@ public class OperandStackImpl implements OperandStack {
 
     @Override
     public Result pop() throws NoSuchElementException {
-        if (isEmpty()) throw new NoSuchElementException("Stack Empty");
+        if (isEmpty()) throw new NoSuchElementException("Empty Stack");
         final Operand poppedOperand = stack.pop();
         return new ResultImpl(this, poppedOperand);
     }
 
     @Override
     public Operand peek() throws NoSuchElementException {
-        if (isEmpty()) throw new NoSuchElementException("Stack Empty");
+        if (isEmpty()) throw new NoSuchElementException("Empty Stack");
         return stack.peek();
     }
 

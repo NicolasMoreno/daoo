@@ -1,19 +1,22 @@
 package nicolasmoreno.tp4.parser;
 
 import daoo.repl.Command;
-import daoo.repl.Parser;
+import daoo.repl.Factory;
+import nicolasmoreno.tp4.command.LengthCommand;
 import org.jetbrains.annotations.NotNull;
 
-public class LengthParser implements Parser<Command> {
+public class LengthParser implements Factory<Command> {
+
+    private final String LENGTH_COMMAND = "length";
 
     @NotNull
     @Override
     public Command apply(@NotNull String line) {
-        return null;
+        return new LengthCommand();
     }
 
     @Override
     public boolean test(@NotNull String line) {
-        return false;
+        return line.toLowerCase().equals(LENGTH_COMMAND);
     }
 }

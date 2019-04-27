@@ -1,11 +1,11 @@
 package nicolasmoreno.tp4.parser;
 
+import daoo.repl.Factory;
 import daoo.repl.Operand;
-import daoo.repl.Parser;
 import nicolasmoreno.tp4.operand.OperandImpl;
 import org.jetbrains.annotations.NotNull;
 
-public class DoubleParser implements Parser<Operand> {
+public class DoubleParser implements Factory<Operand> {
 
     @NotNull
     @Override

@@ -1,8 +1,6 @@
 package nicolasmoreno.tp4.operand;
 
-import daoo.repl.Command;
 import daoo.repl.Operand;
-import nicolasmoreno.tp4.command.OperandCommand;
 import org.jetbrains.annotations.NotNull;
 
 public class OperandImpl implements Operand {

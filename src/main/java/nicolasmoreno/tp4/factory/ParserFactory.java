@@ -1,7 +1,7 @@
 package nicolasmoreno.tp4.factory;
 
 
-import nicolasmoreno.tp4.builder.ParserRegistryBuilder;
+import nicolasmoreno.tp4.builder.EnvironmentBuilder;
 import nicolasmoreno.tp4.parser.BinaryArithmeticParser;
 import nicolasmoreno.tp4.parser.DoubleParser;
 import nicolasmoreno.tp4.parser.LengthParser;
@@ -26,6 +26,6 @@ public class ParserFactory {
         return new LengthParser();
     }
 
-    public static ParserRegistryBuilder parserRegistry() { return new ParserRegistryBuilder(); }
+    public static EnvironmentBuilder environment() { return new EnvironmentBuilder(); }
 
 }

@@ -1,12 +1,12 @@
 package daoo.repl;
 
 import static nicolasmoreno.tp4.factory.ParserFactory.*;
-import static nicolasmoreno.tp4.factory.ReplFactory.repl;
+import static daoo.repl.ReplFactory.repl;
 
 public class Main {
 
     public static void main(String[] args) {
-        final ParserRegistry registry = parserRegistry()
+        final Environment registry = environment()
                 .addOperand(doubleParser())
                 .addOperand(literalParser())
                 .addCommand(binaryArithmeticParser())
