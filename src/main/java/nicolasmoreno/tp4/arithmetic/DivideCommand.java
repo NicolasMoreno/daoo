@@ -13,10 +13,10 @@ public class DivideCommand extends ArithmeticCommand{
     @Override
     public OperandStack execute(@NotNull OperandStack stack) {
         try {
-            previousValue = stack; // Sólo asigna referencia.
-            final Double element1 = stack.pop().element().as(Double.class);
-            final Double element2 = stack.pop().element().as(Double.class);
-            return stack.push(new OperandImpl(element1 / element2));
+            previousValue = stack;
+            final OperandStack.Result result1 = stack.pop();
+            final OperandStack.Result result2 = result1.tail().pop();
+            return result2.tail().push(new OperandImpl(result1.element().as(Double.class) / result2.element().as(Double.class)));
         } catch (Exception e) {
             return previousValue;
         }

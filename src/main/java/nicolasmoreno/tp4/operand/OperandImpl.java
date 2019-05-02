@@ -20,4 +20,16 @@ public class OperandImpl implements Operand {
     public String print() {
         return value.toString();
     }
+
+    public static final Operand INVALID_OPERAND = new Operand() {
+        @Override
+        public <T> T as(@NotNull Class<T> type) {
+            return null;
+        }
+
+        @Override
+        public String print() {
+            return "Invalid Operand";
+        }
+    };
 }

@@ -16,10 +16,17 @@ public class OperandCommand implements Command {
         this.lastStack = new OperandStackImpl();
     }
 
+    public OperandCommand(Operand operand, OperandStack lastStack) {
+        this.operand = operand;
+        this.lastStack = lastStack;
+    }
+
     @Override
     public OperandStack execute(@NotNull OperandStack stack) {
-        this.lastStack = stack.push(operand);
-        return lastStack;
+        if (!stack.isEmpty()) {
+            this.lastStack = stack;
+        }
+        return stack.push(operand);
     }
 
     @Override

@@ -4,39 +4,48 @@ import daoo.repl.Operand;
 import daoo.repl.OperandStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Stack;
+
+import static nicolasmoreno.tp4.operand.OperandImpl.INVALID_OPERAND;
 
 public class OperandStackImpl implements OperandStack {
 
-    private Stack<Operand> stack;
+    private List<Operand> operandList;
 
     public OperandStackImpl() {
-        this.stack = new Stack<>();
+        operandList = new ArrayList<>();
     }
+
+    private OperandStackImpl(List<Operand> operandList) {
+        this.operandList = operandList;
+    }
+
 
     @Override
     public Result pop() throws NoSuchElementException {
         if (isEmpty()) throw new NoSuchElementException("Empty Stack");
-        final Operand poppedOperand = stack.pop();
-        return new ResultImpl(this, poppedOperand);
+        final Operand poppedOperand = this.operandList.get(this.operandList.size() - 1);
+        final List<Operand> poppedList = ImmutableListFactory.pop(this.operandList);
+        return new ResultImpl(new OperandStackImpl(poppedList), poppedOperand);
     }
 
     @Override
     public Operand peek() throws NoSuchElementException {
         if (isEmpty()) throw new NoSuchElementException("Empty Stack");
-        return stack.peek();
+        return operandList.get(operandList.size() - 1);
     }
 
     @Override
     public OperandStack push(@NotNull Operand operand) {
-        stack.push(operand);
-        return this;
+        final List<Operand> addedList = ImmutableListFactory.add(operandList, operand);
+        return new OperandStackImpl(addedList);
     }
 
     @Override
     public boolean isEmpty() {
-        return this.stack.isEmpty();
+        return operandList.isEmpty();
     }
 
     private class ResultImpl implements Result {
@@ -59,4 +68,21 @@ public class OperandStackImpl implements OperandStack {
             return element;
         }
     }
+
+    private static final OperandStack INVALID_STACK = new OperandStack() {
+        @Override
+        public Result pop() throws NoSuchElementException {
+            return null;
+        }
+
+        @Override
+        public Operand peek() throws NoSuchElementException {
+            return INVALID_OPERAND;
+        }
+
+        @Override
+        public OperandStack push(@NotNull Operand operand) {
+            return null;
+        }
+    } ;
 }

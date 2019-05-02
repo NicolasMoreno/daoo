@@ -1,12 +1,14 @@
 package nicolasmoreno.tp4.registry;
 
 import daoo.repl.*;
-import nicolasmoreno.tp4.command.OperandCommand;
 import nicolasmoreno.tp4.operandStack.OperandStackImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static nicolasmoreno.tp4.factory.OperandCommandFactory.newOperandCommand;
+import static nicolasmoreno.tp4.operand.OperandImpl.INVALID_OPERAND;
 
 public class EnvironmentImpl implements Environment {
 
@@ -17,8 +19,8 @@ public class EnvironmentImpl implements Environment {
 
     public EnvironmentImpl() {
         globalOperandStack = new OperandStackImpl();
-        this.operandFactoryList = new ArrayList<>();
-        this.commandFactoryList = new ArrayList<>();
+        operandFactoryList = new ArrayList<>();
+        commandFactoryList = new ArrayList<>();
     }
 
     @Override
@@ -37,7 +39,7 @@ public class EnvironmentImpl implements Environment {
         for (Factory<Operand> operandParser: operandFactoryList) {
             if (operandParser.test(input)) {
                 final Operand foundOperand = operandParser.apply(input);
-                return new OperandCommand(foundOperand);
+                return newOperandCommand(foundOperand);
             }
         }
         for (Factory<Command> commandParser: commandFactoryList) {
@@ -53,7 +55,11 @@ public class EnvironmentImpl implements Environment {
 
     @Override
     public void undo(@NotNull Command command) {
-
+        try {
+            globalOperandStack = command.undo();
+        } catch (UnsupportedOperationException e) {
+            globalOperandStack = globalOperandStack.push(INVALID_OPERAND);
+        }
     }
 
     @NotNull
