@@ -2,10 +2,10 @@ package nicolasmoreno.tp4.parser;
 
 import daoo.repl.Command;
 import daoo.repl.Factory;
-import nicolasmoreno.tp4.arithmetic.AdditionCommand;
-import nicolasmoreno.tp4.arithmetic.DivideCommand;
-import nicolasmoreno.tp4.arithmetic.MultiplyCommand;
-import nicolasmoreno.tp4.arithmetic.SubtractionCommand;
+import nicolasmoreno.tp4.command.arithmetic.AdditionCommand;
+import nicolasmoreno.tp4.command.arithmetic.DivideCommand;
+import nicolasmoreno.tp4.command.arithmetic.MultiplyCommand;
+import nicolasmoreno.tp4.command.arithmetic.SubtractionCommand;
 import org.jetbrains.annotations.NotNull;
 
 public class BinaryArithmeticParser implements Factory<Command> {

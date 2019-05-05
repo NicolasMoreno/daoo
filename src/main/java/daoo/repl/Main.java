@@ -11,6 +11,7 @@ public class Main {
                 .addOperand(literalParser())
                 .addCommand(binaryArithmeticParser())
                 .addCommand(lengthParser())
+                .addCommand(functionParser())
                 .build();
 
         final Repl repl = repl(registry);

@@ -2,10 +2,7 @@ package nicolasmoreno.tp4.factory;
 
 
 import nicolasmoreno.tp4.builder.EnvironmentBuilder;
-import nicolasmoreno.tp4.parser.BinaryArithmeticParser;
-import nicolasmoreno.tp4.parser.DoubleParser;
-import nicolasmoreno.tp4.parser.LengthParser;
-import nicolasmoreno.tp4.parser.LiteralParser;
+import nicolasmoreno.tp4.parser.*;
 
 
 public class ParserFactory {
@@ -25,6 +22,8 @@ public class ParserFactory {
     public static LengthParser lengthParser() {
         return new LengthParser();
     }
+
+    public static FunctionParser functionParser() { return new FunctionParser(); }
 
     public static EnvironmentBuilder environment() { return new EnvironmentBuilder(); }
 

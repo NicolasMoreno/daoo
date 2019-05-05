@@ -7,8 +7,6 @@ import java.util.Scanner;
 import java.util.Stack;
 
 import static daoo.printer.TextPrinter.print;
-import static nicolasmoreno.tp4.factory.OperandCommandFactory.operandCommand;
-import static nicolasmoreno.tp4.operand.OperandImpl.INVALID_OPERAND;
 
 public class ReplImpl extends Repl {
 
@@ -40,6 +38,7 @@ public class ReplImpl extends Repl {
     private void evaluateAndExecuteCommand(String line) {
         final Command command = environment.evaluate(line);
         undoStack.push(command);
+        redoStack.clear();
         environment.execute(command);
     }
 
@@ -62,7 +61,7 @@ public class ReplImpl extends Repl {
         if (command != Command.EMPTY_COMMAND) {
             redoStack.push(command);
         }
-        environment.undo(command); // TODO me está apilando el emptycommand y explota al querer hacer el undo
+        environment.undo(command);
     }
 
     private void redoCommand() {

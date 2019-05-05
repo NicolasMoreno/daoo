@@ -11,7 +11,4 @@ public class OperandCommandFactory {
         return new OperandCommand(operand);
     }
 
-    public static Command operandCommand(Operand operand, OperandStack stack) {
-        return new OperandCommand(operand, stack);
-    }
 }

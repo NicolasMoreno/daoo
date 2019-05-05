@@ -1,4 +1,4 @@
-package nicolasmoreno.tp4.arithmetic;
+package nicolasmoreno.tp4.command.arithmetic;
 
 import daoo.repl.Command;
 import daoo.repl.OperandStack;

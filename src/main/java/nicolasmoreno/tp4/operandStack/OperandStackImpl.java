@@ -2,6 +2,7 @@ package nicolasmoreno.tp4.operandStack;
 
 import daoo.repl.Operand;
 import daoo.repl.OperandStack;
+import nicolasmoreno.tp4.operand.OperandImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class OperandStackImpl implements OperandStack {
         }
     }
 
-    private static final OperandStack INVALID_STACK = new OperandStack() {
+    public static final OperandStack INVALID_STACK = new OperandStack() {
         @Override
         public Result pop() throws NoSuchElementException {
             return null;
@@ -85,4 +86,21 @@ public class OperandStackImpl implements OperandStack {
             return null;
         }
     } ;
+
+    public static final OperandStack SUCCESS_VARIABLE = new OperandStack() {
+        @Override
+        public Result pop() throws NoSuchElementException {
+            return null;
+        }
+
+        @Override
+        public Operand peek() throws NoSuchElementException {
+            return new OperandImpl("");
+        }
+
+        @Override
+        public OperandStack push(@NotNull Operand operand) {
+            return null;
+        }
+    };
 }

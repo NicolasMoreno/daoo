@@ -2,6 +2,7 @@ package nicolasmoreno.tp4.registry;
 
 import daoo.repl.*;
 import nicolasmoreno.tp4.operandStack.OperandStackImpl;
+import nicolasmoreno.tp4.variable.Declaration;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -9,18 +10,26 @@ import java.util.List;
 
 import static nicolasmoreno.tp4.factory.OperandCommandFactory.newOperandCommand;
 import static nicolasmoreno.tp4.operand.OperandImpl.INVALID_OPERAND;
+import static nicolasmoreno.tp4.operandStack.OperandStackImpl.SUCCESS_VARIABLE;
 
 public class EnvironmentImpl implements Environment {
 
     private List<Factory<Operand>> operandFactoryList;
     private List<Factory<Command>> commandFactoryList;
     private OperandStack globalOperandStack;
-
+    private List<Declaration> declarationList;
 
     public EnvironmentImpl() {
         globalOperandStack = new OperandStackImpl();
         operandFactoryList = new ArrayList<>();
         commandFactoryList = new ArrayList<>();
+        declarationList = new ArrayList<>();
+    }
+
+    private EnvironmentImpl(List<Factory<Operand>> operandFactoryList, List<Factory<Command>> commandFactoryList) {
+        this.operandFactoryList = operandFactoryList;
+        this.commandFactoryList = commandFactoryList;
+        globalOperandStack = new OperandStackImpl();
     }
 
     @Override
@@ -50,7 +59,12 @@ public class EnvironmentImpl implements Environment {
 
     @Override
     public void execute(@NotNull Command command) {
-        this.globalOperandStack = command.execute(globalOperandStack);
+        final OperandStack executed = command.execute(globalOperandStack);
+        if (executed == SUCCESS_VARIABLE) {
+            this.declarationList.add((Declaration) command);
+        } else {
+            globalOperandStack = executed;
+        }
     }
 
     @Override
@@ -65,7 +79,7 @@ public class EnvironmentImpl implements Environment {
     @NotNull
     @Override
     public Environment copy() {
-        return null;
+        return new EnvironmentImpl(this.operandFactoryList, this.commandFactoryList);
     }
 
     @Override

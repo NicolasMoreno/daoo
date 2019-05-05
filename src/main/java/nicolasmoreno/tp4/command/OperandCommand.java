@@ -16,11 +16,6 @@ public class OperandCommand implements Command {
         this.lastStack = new OperandStackImpl();
     }
 
-    public OperandCommand(Operand operand, OperandStack lastStack) {
-        this.operand = operand;
-        this.lastStack = lastStack;
-    }
-
     @Override
     public OperandStack execute(@NotNull OperandStack stack) {
         if (!stack.isEmpty()) {

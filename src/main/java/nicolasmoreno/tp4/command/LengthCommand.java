@@ -12,14 +12,13 @@ public class LengthCommand implements Command {
 
     @Override
     public OperandStack execute(@NotNull OperandStack stack) {
-//        if (stack.isEmpty())
-        previousStack = stack; // Tengo que encontrar la manera de duplicar
+        previousStack = stack;
         final Operand literalStringOperand = stack.pop().element();
         return stack.push(new OperandImpl(literalStringOperand.print().length()));
     }
 
     @Override
     public OperandStack undo() {
-        return null;
+        return previousStack;
     }
 }
