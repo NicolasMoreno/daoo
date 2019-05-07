@@ -2,7 +2,6 @@ package nicolasmoreno.tp4.registry;
 
 import daoo.repl.*;
 import nicolasmoreno.tp4.operandStack.OperandStackImpl;
-import nicolasmoreno.tp4.variable.Declaration;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -17,13 +16,11 @@ public class EnvironmentImpl implements Environment {
     private List<Factory<Operand>> operandFactoryList;
     private List<Factory<Command>> commandFactoryList;
     private OperandStack globalOperandStack;
-    private List<Declaration> declarationList;
 
     public EnvironmentImpl() {
         globalOperandStack = new OperandStackImpl();
         operandFactoryList = new ArrayList<>();
         commandFactoryList = new ArrayList<>();
-        declarationList = new ArrayList<>();
     }
 
     private EnvironmentImpl(List<Factory<Operand>> operandFactoryList, List<Factory<Command>> commandFactoryList) {
@@ -60,9 +57,7 @@ public class EnvironmentImpl implements Environment {
     @Override
     public void execute(@NotNull Command command) {
         final OperandStack executed = command.execute(globalOperandStack);
-        if (executed == SUCCESS_VARIABLE) {
-            this.declarationList.add((Declaration) command);
-        } else {
+        if (executed != SUCCESS_VARIABLE) {
             globalOperandStack = executed;
         }
     }

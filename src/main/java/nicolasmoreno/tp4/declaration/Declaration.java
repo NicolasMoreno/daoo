@@ -1,12 +1,9 @@
-package nicolasmoreno.tp4.variable;
+package nicolasmoreno.tp4.declaration;
 
-import daoo.repl.Command;
 import daoo.repl.OperandStack;
 import org.jetbrains.annotations.NotNull;
 
-public interface Declaration extends Command {
-
-    void declare();
+public interface Declaration{
 
     boolean test(String line);
 

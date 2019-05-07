@@ -25,6 +25,8 @@ public class ParserFactory {
 
     public static FunctionParser functionParser() { return new FunctionParser(); }
 
+    public static VariableParser variableParser() { return new VariableParser(); }
+
     public static EnvironmentBuilder environment() { return new EnvironmentBuilder(); }
 
 }

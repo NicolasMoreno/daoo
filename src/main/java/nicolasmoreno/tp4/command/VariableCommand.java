@@ -1,27 +1,33 @@
 package nicolasmoreno.tp4.command;
 
+import daoo.repl.Command;
 import daoo.repl.Operand;
 import daoo.repl.OperandStack;
-import nicolasmoreno.tp4.variable.Declaration;
 import org.jetbrains.annotations.NotNull;
 
 import static nicolasmoreno.tp4.operandStack.OperandStackImpl.INVALID_STACK;
 import static nicolasmoreno.tp4.operandStack.OperandStackImpl.SUCCESS_VARIABLE;
 
-public class VariableCommand implements Declaration {
+public class VariableCommand implements Command {
 
-    private String variableName;
     private Operand variableValue;
     private OperandStack lastValue;
+    private boolean isDeclared;
 
-    public VariableCommand(String variableName, Operand variableValue) {
-        this.variableName = variableName;
+    public VariableCommand(Operand variableValue) {
         this.variableValue = variableValue;
+        this.isDeclared = false;
     }
 
     @Override
     public OperandStack execute(@NotNull OperandStack stack) {
-        return SUCCESS_VARIABLE;
+        if (!isDeclared) {
+            isDeclared = true;
+            return SUCCESS_VARIABLE;
+        } else {
+            this.lastValue = stack;
+            return stack.push(variableValue);
+        }
     }
 
     @Override
@@ -30,19 +36,4 @@ public class VariableCommand implements Declaration {
         else return INVALID_STACK;
     }
 
-    @Override
-    public void declare() {
-
-    }
-
-    @Override
-    public boolean test(String line) {
-        return line.trim().equals(variableName);
-    }
-
-    @Override
-    public OperandStack call(@NotNull OperandStack stack) {
-        this.lastValue = stack;
-        return stack.push(variableValue);
-    }
 }
