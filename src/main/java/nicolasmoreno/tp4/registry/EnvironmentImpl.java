@@ -5,9 +5,12 @@ import nicolasmoreno.tp4.operandStack.OperandStackImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static nicolasmoreno.tp4.factory.OperandCommandFactory.newOperandCommand;
+import static nicolasmoreno.tp4.factory.ParserFactory.variableParser;
 import static nicolasmoreno.tp4.operand.OperandImpl.INVALID_OPERAND;
 import static nicolasmoreno.tp4.operandStack.OperandStackImpl.SUCCESS_VARIABLE;
 
@@ -15,12 +18,16 @@ public class EnvironmentImpl implements Environment {
 
     private List<Factory<Operand>> operandFactoryList;
     private List<Factory<Command>> commandFactoryList;
+    private Factory<Command> variableParser;
+    private Map<String, Command> variableMap;
     private OperandStack globalOperandStack;
 
     public EnvironmentImpl() {
         globalOperandStack = new OperandStackImpl();
         operandFactoryList = new ArrayList<>();
         commandFactoryList = new ArrayList<>();
+        variableParser = variableParser(this.copy());
+        variableMap = new HashMap<>();
     }
 
     private EnvironmentImpl(List<Factory<Operand>> operandFactoryList, List<Factory<Command>> commandFactoryList) {
@@ -51,15 +58,20 @@ public class EnvironmentImpl implements Environment {
         for (Factory<Command> commandParser: commandFactoryList) {
             if (commandParser.test(input)) return commandParser.apply(input);
         }
+        if (variableParser.test(input)) {
+            this.variableMap.put(input.split("=")[0].trim(), variableParser.apply(input));
+        } else if (variableMap.containsKey(input)) {
+            return variableMap.get(input);
+        }
         return Command.EMPTY_COMMAND;
+
     }
 
     @Override
     public void execute(@NotNull Command command) {
         final OperandStack executed = command.execute(globalOperandStack);
-        if (executed != SUCCESS_VARIABLE) {
-            globalOperandStack = executed;
-        }
+        globalOperandStack = executed;
+
     }
 
     @Override

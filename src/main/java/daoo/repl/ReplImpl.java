@@ -30,14 +30,13 @@ public class ReplImpl extends Repl {
             } else {
                 evaluateAndExecuteCommand(line);
             }
-            final Operand operand = environment.stack().peek();
-            print(output, operand.print());
+            print(output, environment.stack());
         }
     }
 
     private void evaluateAndExecuteCommand(String line) {
         final Command command = environment.evaluate(line);
-        undoStack.push(command);
+        if (command != Command.EMPTY_COMMAND) undoStack.push(command);
         redoStack.clear();
         environment.execute(command);
     }

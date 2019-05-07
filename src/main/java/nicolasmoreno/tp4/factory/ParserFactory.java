@@ -1,6 +1,7 @@
 package nicolasmoreno.tp4.factory;
 
 
+import daoo.repl.Environment;
 import nicolasmoreno.tp4.builder.EnvironmentBuilder;
 import nicolasmoreno.tp4.parser.*;
 
@@ -25,7 +26,7 @@ public class ParserFactory {
 
     public static FunctionParser functionParser() { return new FunctionParser(); }
 
-    public static VariableParser variableParser() { return new VariableParser(); }
+    public static VariableParser variableParser(Environment environment) { return new VariableParser(environment); }
 
     public static EnvironmentBuilder environment() { return new EnvironmentBuilder(); }
 
