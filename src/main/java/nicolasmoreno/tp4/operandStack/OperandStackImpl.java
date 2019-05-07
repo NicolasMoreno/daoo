@@ -95,7 +95,17 @@ public class OperandStackImpl implements OperandStack {
 
         @Override
         public Operand peek() throws NoSuchElementException {
-            return new OperandImpl("");
+            return new Operand() {
+                @Override
+                public <T> T as(@NotNull Class<T> type) {
+                    return null;
+                }
+
+                @Override
+                public String print() {
+                    return "Created Variable";
+                }
+            };
         }
 
         @Override

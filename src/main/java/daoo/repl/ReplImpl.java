@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.Stack;
 
 import static daoo.printer.TextPrinter.print;
+import static nicolasmoreno.tp4.parser.VariableParser.CREATED_VARIABLE;
 
 public class ReplImpl extends Repl {
 
@@ -36,9 +37,15 @@ public class ReplImpl extends Repl {
 
     private void evaluateAndExecuteCommand(String line) {
         final Command command = environment.evaluate(line);
-        if (command != Command.EMPTY_COMMAND) undoStack.push(command);
-        redoStack.clear();
+        if (messageCommand(command)) {
+            undoStack.push(command);
+            redoStack.clear();
+        }
         environment.execute(command);
+    }
+
+    private boolean messageCommand(Command command) {
+        return (command != Command.EMPTY_COMMAND || command != CREATED_VARIABLE);
     }
 
 

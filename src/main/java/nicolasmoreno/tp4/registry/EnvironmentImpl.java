@@ -13,6 +13,7 @@ import static nicolasmoreno.tp4.factory.OperandCommandFactory.newOperandCommand;
 import static nicolasmoreno.tp4.factory.ParserFactory.variableParser;
 import static nicolasmoreno.tp4.operand.OperandImpl.INVALID_OPERAND;
 import static nicolasmoreno.tp4.operandStack.OperandStackImpl.SUCCESS_VARIABLE;
+import static nicolasmoreno.tp4.parser.VariableParser.CREATED_VARIABLE;
 
 public class EnvironmentImpl implements Environment {
 
@@ -60,6 +61,7 @@ public class EnvironmentImpl implements Environment {
         }
         if (variableParser.test(input)) {
             this.variableMap.put(input.split("=")[0].trim(), variableParser.apply(input));
+            //return CREATED_VARIABLE; TODO hacer esto para emitir un mensaje que se creó
         } else if (variableMap.containsKey(input)) {
             return variableMap.get(input);
         }

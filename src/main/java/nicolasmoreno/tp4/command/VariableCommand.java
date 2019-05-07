@@ -36,4 +36,5 @@ public class VariableCommand implements Command {
         else return INVALID_STACK;
     }
 
+
 }
