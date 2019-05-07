@@ -10,16 +10,15 @@ import java.util.List;
 import java.util.Map;
 
 import static nicolasmoreno.tp4.factory.OperandCommandFactory.newOperandCommand;
-import static nicolasmoreno.tp4.factory.ParserFactory.variableParser;
+import static nicolasmoreno.tp4.factory.ParserFactory.*;
 import static nicolasmoreno.tp4.operand.OperandImpl.INVALID_OPERAND;
-import static nicolasmoreno.tp4.operandStack.OperandStackImpl.SUCCESS_VARIABLE;
-import static nicolasmoreno.tp4.parser.VariableParser.CREATED_VARIABLE;
 
 public class EnvironmentImpl implements Environment {
 
     private List<Factory<Operand>> operandFactoryList;
     private List<Factory<Command>> commandFactoryList;
     private Factory<Command> variableParser;
+    private Factory<Command> functionParser;
     private Map<String, Command> variableMap;
     private OperandStack globalOperandStack;
 
@@ -28,6 +27,7 @@ public class EnvironmentImpl implements Environment {
         operandFactoryList = new ArrayList<>();
         commandFactoryList = new ArrayList<>();
         variableParser = variableParser(this.copy());
+        functionParser = functionParser(this.copy());
         variableMap = new HashMap<>();
     }
 
@@ -62,7 +62,10 @@ public class EnvironmentImpl implements Environment {
         if (variableParser.test(input)) {
             this.variableMap.put(input.split("=")[0].trim(), variableParser.apply(input));
             //return CREATED_VARIABLE; TODO hacer esto para emitir un mensaje que se creó
-        } else if (variableMap.containsKey(input)) {
+        } else if (functionParser.test(input)) {
+            this.variableMap.put(String.valueOf(input.charAt(0)), functionParser.apply(input));
+        }
+        if (variableMap.containsKey(input)) {
             return variableMap.get(input);
         }
         return Command.EMPTY_COMMAND;
@@ -71,8 +74,7 @@ public class EnvironmentImpl implements Environment {
 
     @Override
     public void execute(@NotNull Command command) {
-        final OperandStack executed = command.execute(globalOperandStack);
-        globalOperandStack = executed;
+        globalOperandStack = command.execute(globalOperandStack);
 
     }
 
