@@ -21,22 +21,26 @@ public class DeclarationParser implements Factory<Command> {
     public DeclarationParser(Environment environment) {
         variableMap = new HashMap<>();
         variableParser = variableParser(environment);
-        functionParser = functionParser();
+        functionParser = functionParser(environment);
     }
 
     @NotNull
     @Override
     public Command apply(@NotNull String line) {
         final String[] splitString = line.split("=");
-        final String varName = splitString[0].indexOf('(') == -1 ?
-                splitString[0].trim() :
-                splitString[0].substring(0, splitString[0].indexOf('('));
+        final String varName = getVarName(splitString[0]);
         if (variableMap.containsKey(varName)) {
             return variableMap.get(varName);
         } else {
             this.variableMap.put(varName, evaluate(line));
             return Command.EMPTY_COMMAND;
         }
+    }
+
+    private String getVarName(String s) {
+        return s.indexOf('(') == -1 ?
+                s.trim() :
+                s.substring(0, s.indexOf('('));
     }
 
     private Command evaluate(String line) {

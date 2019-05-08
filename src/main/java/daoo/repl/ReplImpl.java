@@ -7,7 +7,6 @@ import java.util.Scanner;
 import java.util.Stack;
 
 import static daoo.printer.TextPrinter.print;
-import static nicolasmoreno.tp4.parser.VariableParser.CREATED_VARIABLE;
 
 public class ReplImpl extends Repl {
 

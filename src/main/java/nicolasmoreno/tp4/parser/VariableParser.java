@@ -11,7 +11,7 @@ import static nicolasmoreno.tp4.operandStack.OperandStackImpl.SUCCESS_VARIABLE;
 
 public class VariableParser implements Factory<Command> {
 
-    private final String VARIABLE_KEYWORD = "[a-zA-Z]+( *)=( *)(\"[a-zA-Z]+\"|[0-9]+)";
+    private final String VARIABLE_KEYWORD = "[a-zA-Z]+( *)=( *)(\"[a-zA-Z]+\"|[a-zA-Z]+|[0-9]+)";
     private Environment internalEnvironment;
 
     public VariableParser(Environment environment) {
