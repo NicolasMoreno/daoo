@@ -45,7 +45,7 @@ public class ReplImpl extends Repl {
     }
 
     private boolean messageCommand(Command command) {
-        return (command != Command.EMPTY_COMMAND || command != CREATED_VARIABLE);
+        return (command != Command.EMPTY_COMMAND);
     }
 
 
@@ -68,6 +68,7 @@ public class ReplImpl extends Repl {
             redoStack.push(command);
         }
         environment.undo(command);
+        // TODO algo pasa cuando hago 2ble call de una variable y quiero hacer undo de esos 2
     }
 
     private void redoCommand() {

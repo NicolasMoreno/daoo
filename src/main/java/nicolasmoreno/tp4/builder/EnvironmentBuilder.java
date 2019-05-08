@@ -7,6 +7,8 @@ import daoo.repl.Operand;
 import nicolasmoreno.tp1.builder.Builder;
 import nicolasmoreno.tp4.registry.EnvironmentImpl;
 
+import static nicolasmoreno.tp4.factory.ParserFactory.declarationParser;
+
 public class EnvironmentBuilder implements Builder<Environment> {
 
     private Environment environment;
@@ -22,6 +24,11 @@ public class EnvironmentBuilder implements Builder<Environment> {
 
     public EnvironmentBuilder addCommand(Factory<Command> commandParser) {
         environment.addCommandFactory(commandParser);
+        return this;
+    }
+
+    public EnvironmentBuilder addDeclarationParser() {
+        environment.addCommandFactory(declarationParser(environment.copy()));
         return this;
     }
 

@@ -12,11 +12,9 @@ public class FunctionCommand implements Command {
     private Environment functionEnvironment;
     private Queue<String> splittedFunctionValue;
     private Set<String> funcitonParameters;
-    private String functionName;
     private OperandStack lastValue;
 
-    public FunctionCommand(String line, Environment environment) {
-        functionEnvironment = environment;
+    public FunctionCommand(String line) {
         splittedFunctionValue = new ArrayDeque<>();
         funcitonParameters = new HashSet<>();
         fillFunctionProperties(line);
@@ -32,9 +30,7 @@ public class FunctionCommand implements Command {
         final String cleaned = functionDeclaration.trim().replaceAll("([()])", " ");
         final String[] splitDeclaration = cleaned.split(" ");
         for (int i = 0; i < splitDeclaration.length; i++) {
-            if (i == 0) {
-                functionName = splitDeclaration[i];
-            } else {
+            if (i != 0) {
                 funcitonParameters.add(splitDeclaration[i]);
             }
         }

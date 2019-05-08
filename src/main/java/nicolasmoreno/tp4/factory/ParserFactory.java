@@ -24,9 +24,11 @@ public class ParserFactory {
         return new LengthParser();
     }
 
-    public static FunctionParser functionParser(Environment environment) { return new FunctionParser(environment); }
+    public static FunctionParser functionParser() { return new FunctionParser(); }
 
     public static VariableParser variableParser(Environment environment) { return new VariableParser(environment); }
+
+    public static DeclarationParser declarationParser(Environment environment) { return new DeclarationParser(environment); }
 
     public static EnvironmentBuilder environment() { return new EnvironmentBuilder(); }
 
