@@ -14,7 +14,7 @@ public class FunctionCommand implements Command {
 
     private Environment internalEnvironment;
     private Stack<String> functionValue;
-    private Map<String, Operand> functionParameters;
+    private Map<String, Command> functionParameters;
     private String functionName;
     private OperandStack lastValue;
 
@@ -47,34 +47,25 @@ public class FunctionCommand implements Command {
     public OperandStack execute(@NotNull OperandStack stack) {
         // TODO VER QUE PUEDO MEJORAR ACá
         lastValue = stack;
-        Stack<Command> commandsToExecute = new Stack<>();
-        final OperandStack.Result pop1 = stack.pop();
-        OperandStack stacksResults = pop1.tail();
-        Result result = get(functionValue);
-        commandsToExecute.push(new OperandCommand(pop1.element()));
-        while (result.element() != null && !stacksResults.isEmpty()) {
-            if (functionParameters.containsKey(result.element())) {
-                final OperandStack.Result pop = stacksResults.pop();
-                stacksResults = pop.tail();
-                commandsToExecute.push(new OperandCommand(pop.element()));
+        final Stack<Command> toExecute = new Stack<>();
+        OperandStack remainingGlobalstack;
+        for (String stringCommand : functionValue) {
+            if (functionParameters.containsKey(stringCommand) && functionParameters.get(stringCommand) != null) {
+                final OperandStack.Result pop = stack.pop();
+                remainingGlobalstack = pop.tail();
+                final Command command = internalEnvironment.evaluate(pop.element().print());
+                functionParameters.replace(stringCommand, command);
+                toExecute.push(command);
             } else {
-                commandsToExecute.push(internalEnvironment.evaluate(result.element()));
+                final Command command = internalEnvironment.evaluate(stringCommand);
+                toExecute.push(command);
             }
-            result = get(result.tail());
         }
-        Command command = commandsToExecute.pop();
-        if (commandsToExecute.size() > 0) {
-            internalEnvironment.execute(command);
-            while (commandsToExecute.size() > 1) {
-                internalEnvironment.execute(command);
-                command = commandsToExecute.pop();
-            }
-            final OperandStack executed = commandsToExecute.pop().execute(internalEnvironment.stack());
-            return stacksResults.push(executed.pop().element());
-        } else {
-            final OperandStack executed = command.execute(internalEnvironment.stack());
-            return stacksResults.push(executed.pop().element());
+
+        for (Command command : toExecute) {
+            command.execute(internalEnvironment.stack());
         }
+        return stack;
     }
 
     @Override

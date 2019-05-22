@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 public abstract class ArithmeticCommand implements Command {
 
     OperandStack previousValue;
-    private String arithmeticValue;
 
     public ArithmeticCommand() {
         previousValue = new OperandStackImpl();
