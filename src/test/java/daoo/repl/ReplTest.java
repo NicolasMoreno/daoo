@@ -3,7 +3,6 @@ package daoo.repl;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
-import daoo.repl.Environment;
 import nicolasmoreno.tp4.factory.ParserFactory;
 import org.junit.runner.RunWith;
 
@@ -34,6 +33,26 @@ public class ReplTest {
         final Repl repl = repl(String.valueOf(left), String.valueOf(right), "-");
         final Operand resultOperand = repl.environment.stack().peek();
         assertEquals("Asserting Subtraction", (double)right - left, resultOperand.as(Double.class), 0.00001);
+    }
+
+    @Property
+    public void multiplicationTest(
+            @InRange(min = "-100", max = "100") Double left,
+            @InRange(min = "-100", max = "100") Double right
+    ){
+        final Repl repl = repl(String.valueOf(left), String.valueOf(right), "*");
+        final Operand resultOperand = repl.environment.stack().peek();
+        assertEquals("Asserting Multiplication", (double)right * left, resultOperand.as(Double.class), 0.00001);
+    }
+
+    @Property
+    public void divisionTest(
+            @InRange(min = "-100", max = "100") Double left,
+            @InRange(min = "-100", max = "100") Double right
+    ){
+        final Repl repl = repl(String.valueOf(left), String.valueOf(right), "/");
+        final Operand resultOperand = repl.environment.stack().peek();
+        assertEquals("Asserting Division", (double)right / left, resultOperand.as(Double.class), 0.00001);
     }
 }
 
