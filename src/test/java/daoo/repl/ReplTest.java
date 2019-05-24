@@ -7,6 +7,7 @@ import nicolasmoreno.tp4.factory.ParserFactory;
 import org.junit.runner.RunWith;
 
 import java.io.*;
+import java.util.NoSuchElementException;
 
 import static daoo.repl.ReplTestBuilder.repl;
 import static nicolasmoreno.tp4.factory.ParserFactory.*;
@@ -53,6 +54,31 @@ public class ReplTest {
         final Repl repl = repl(String.valueOf(left), String.valueOf(right), "/");
         final Operand resultOperand = repl.environment.stack().peek();
         assertEquals("Asserting Division", (double)right / left, resultOperand.as(Double.class), 0.00001);
+    }
+
+    @Property
+    public void operandTest(Double number) {
+        final Repl repl = repl(String.valueOf(number));
+        final Operand resultOperand = repl.environment.stack().peek();
+        assertEquals("Asserting operand", number, resultOperand.as(Double.class), 0.000001);
+    }
+
+    @Property
+    public void literalTest(String text) {
+        final Repl repl = repl(text);
+        try {
+            final Operand result = repl.environment.stack().peek();
+            assertEquals("Asserting literal", text, result.as(String.class));
+        } catch (NoSuchElementException e) {
+            assertEquals("Asserting empty string", text, ""); // Something is happening with non ascii chars
+        }
+    }
+
+    @Property
+    public void lengthTest( String text) { //buscar minimo string length
+        final Repl repl = repl(text, "length");
+        final Operand result = repl.environment.stack().peek();
+        assertEquals("Asserting length", text.length(), (int)result.as(Integer.class));
     }
 }
 
