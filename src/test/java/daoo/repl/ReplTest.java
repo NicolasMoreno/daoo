@@ -7,11 +7,11 @@ import nicolasmoreno.tp4.factory.ParserFactory;
 import org.junit.runner.RunWith;
 
 import java.io.*;
-import java.util.NoSuchElementException;
 
 import static daoo.repl.ReplTestBuilder.repl;
 import static nicolasmoreno.tp4.factory.ParserFactory.*;
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 
 @RunWith(JUnitQuickcheck.class)
 public class ReplTest {
@@ -65,18 +65,16 @@ public class ReplTest {
 
     @Property
     public void literalTest(String text) {
-        final Repl repl = repl(text);
-        try {
-            final Operand result = repl.environment.stack().peek();
-            assertEquals("Asserting literal", text, result.as(String.class));
-        } catch (NoSuchElementException e) {
-            assertEquals("Asserting empty string", text, ""); // Something is happening with non ascii chars
-        }
+        assumeTrue(!text.equals(""));
+        final Repl repl = repl( '"' + text + '"');
+        final Operand result = repl.environment.stack().peek();
+        assertEquals("Asserting literal", text, result.as(String.class));
     }
 
     @Property
     public void lengthTest( String text) { //buscar minimo string length
-        final Repl repl = repl(text, "length");
+        assumeTrue(!text.equals(""));
+        final Repl repl = repl('"' + text + '"', "length");
         final Operand result = repl.environment.stack().peek();
         assertEquals("Asserting length", text.length(), (int)result.as(Integer.class));
     }
