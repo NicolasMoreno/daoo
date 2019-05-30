@@ -11,6 +11,7 @@ import java.io.*;
 import static daoo.repl.ReplTestBuilder.repl;
 import static nicolasmoreno.tp4.factory.ParserFactory.*;
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeThat;
 import static org.junit.Assume.assumeTrue;
 
 @RunWith(JUnitQuickcheck.class)
@@ -72,7 +73,7 @@ public class ReplTest {
     }
 
     @Property
-    public void lengthTest( String text) { //buscar minimo string length
+    public void lengthTest( String text) {
         assumeTrue(!text.equals(""));
         final Repl repl = repl('"' + text + '"', "length");
         final Operand result = repl.environment.stack().peek();
