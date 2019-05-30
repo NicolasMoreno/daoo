@@ -1,0 +1,4 @@
+Resource es la referencia o el valor de cada artículo.
+ResourceProvider es el parser de cada resource, acá haría el http para obtener cada artículo
+ResourceStream es el que notifica al NewsStream que hubo una nueva lectura y les notifica los cambios/elim/agregados
+NewsStream es el que mergea mas de 1 resourceStream y es el que notifica ese merge a todos los que escuchan
