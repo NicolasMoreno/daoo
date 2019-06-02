@@ -1,5 +1,6 @@
 package nicolasmoreno.tp5.resourceProvider;
 
+import nicolasmoreno.tp5.resource.Article;
 import nicolasmoreno.tp5.resource.Resource;
 
 import java.time.Duration;
@@ -16,7 +17,7 @@ public abstract class ArticleProvider implements ResourceProvider {
         this.resourceList = new ArrayList<>();
     }
 
-    public abstract void readArticle();
+    public abstract List<Article> getArticles();
 
     @Override
     public Iterable<Resource> resources() {

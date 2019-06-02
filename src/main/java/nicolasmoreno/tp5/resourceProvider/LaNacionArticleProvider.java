@@ -1,7 +1,6 @@
 package nicolasmoreno.tp5.resourceProvider;
 
 import nicolasmoreno.tp5.resource.Article;
-import nicolasmoreno.tp5.resource.Resource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,6 +8,8 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LaNacionArticleProvider extends ArticleProvider {
 
@@ -19,19 +20,38 @@ public class LaNacionArticleProvider extends ArticleProvider {
     }
 
     @Override
-    public void readArticle() {
+    public List<Article> getArticles() {
+        final List<Article> resourceList = new ArrayList<>();
         try {
             Document lanacionDoc = Jsoup.connect(LA_NACION_URL).get();
             final Elements articles = lanacionDoc.getElementsByTag("article");
             articles.forEach(element -> {
-                final Element firstFilter = element.selectFirst("h1, h2");
+                final Element firstFilter = element.selectFirst("h1, h2, h3");
                 final String link = LA_NACION_URL.concat(firstFilter.getElementsByAttribute("href").attr("href"));
                 final String label = firstFilter.selectFirst("a").text();
-                final Resource resource = new Article(link, label);
-                super.addArticle(resource);
+                final Article article = new Article(link, label);
+                article.setContent(getArticleContent(link));
+                resourceList.add(article);
             });
+            return resourceList;
         } catch (IOException e) {
             e.printStackTrace();
+            return resourceList;
+        }
+    }
+
+    private String getArticleContent(String link) {
+        try {
+            final Document document = Jsoup.connect(link).get();
+            final Elements elements = document.getElementsByTag("p");
+            StringBuilder content = new StringBuilder();
+            for(Element paragraph: elements) {
+                content.append(paragraph.text()).append(" \n");
+            }
+            return content.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
         }
     }
 }

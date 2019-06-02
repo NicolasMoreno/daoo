@@ -9,6 +9,8 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClarinArticleProvider extends ArticleProvider {
 
@@ -19,19 +21,40 @@ public class ClarinArticleProvider extends ArticleProvider {
     }
 
     @Override
-    public void readArticle() {
+    public List<Article> getArticles() {
+        final List<Article> resourceList = new ArrayList<>();
         try {
             final Document clarinDoc = Jsoup.connect(CLARIN_URL).get();
             final Elements articles = clarinDoc.getElementsByTag("article");
             articles.forEach( article -> {
                 final Element element = article.selectFirst("a h1, a h2, a h3");
                 final String label = element.text();
-                final String link = CLARIN_URL.concat(article.selectFirst("a[href]").attr("href"));
-                final Resource resource = new Article(link, label);
-                super.addArticle(resource);
+                final String href = article.selectFirst("a[href]").attr("href");
+                final String link = href.contains(CLARIN_URL) ? href : CLARIN_URL.concat(href);
+                System.out.println(link);
+                final Article obtainedArticle = new Article(link, label);
+                obtainedArticle.setContent(getArticleContent(link));
+                resourceList.add(obtainedArticle);
             });
+            return resourceList;
         } catch (IOException e) {
             e.printStackTrace();
+            return resourceList;
+        }
+    }
+
+    private String getArticleContent(String link) {
+        try {
+            final Document document = Jsoup.connect(link).get();
+            final Elements elements = document.select("div.body-nota p");
+            StringBuilder contentBuilder = new StringBuilder();
+            for (Element paragraph: elements) {
+                contentBuilder.append(paragraph.text()).append(" \n");
+            }
+            return contentBuilder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
         }
     }
 }
