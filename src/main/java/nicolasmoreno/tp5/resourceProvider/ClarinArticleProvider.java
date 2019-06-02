@@ -21,8 +21,8 @@ public class ClarinArticleProvider extends ArticleProvider {
     }
 
     @Override
-    public List<Article> getArticles() {
-        final List<Article> resourceList = new ArrayList<>();
+    public Iterable<Resource> resources() {
+        final List<Resource> resourceList = new ArrayList<>();
         try {
             final Document clarinDoc = Jsoup.connect(CLARIN_URL).get();
             final Elements articles = clarinDoc.getElementsByTag("article");
@@ -31,9 +31,7 @@ public class ClarinArticleProvider extends ArticleProvider {
                 final String label = element.text();
                 final String href = article.selectFirst("a[href]").attr("href");
                 final String link = href.contains(CLARIN_URL) ? href : CLARIN_URL.concat(href);
-                System.out.println(link);
-                final Article obtainedArticle = new Article(link, label);
-                obtainedArticle.setContent(getArticleContent(link));
+                final Resource obtainedArticle = new Article(link, label, getArticleContent(link, "div.body-nota p"));
                 resourceList.add(obtainedArticle);
             });
             return resourceList;
@@ -43,7 +41,7 @@ public class ClarinArticleProvider extends ArticleProvider {
         }
     }
 
-    private String getArticleContent(String link) {
+    /*private String getArticleContent(String link) {
         try {
             final Document document = Jsoup.connect(link).get();
             final Elements elements = document.select("div.body-nota p");
@@ -56,5 +54,5 @@ public class ClarinArticleProvider extends ArticleProvider {
             e.printStackTrace();
             return "";
         }
-    }
+    }*/
 }

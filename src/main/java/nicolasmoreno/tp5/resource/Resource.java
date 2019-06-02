@@ -6,4 +6,6 @@ public interface Resource {
     String link();
 
     String label();
+
+    String body();
 }

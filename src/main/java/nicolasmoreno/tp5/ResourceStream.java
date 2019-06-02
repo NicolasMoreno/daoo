@@ -2,8 +2,8 @@ package nicolasmoreno.tp5;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
-import nicolasmoreno.tp5.resource.Article;
 import nicolasmoreno.tp5.resource.ArticleCabinet;
+import nicolasmoreno.tp5.resource.Resource;
 import nicolasmoreno.tp5.resourceChange.ResourceChange;
 import nicolasmoreno.tp5.resourceProvider.ArticleProvider;
 import java.util.List;
@@ -32,7 +32,7 @@ public class ResourceStream extends Observable<ResourceChange> {
     }
 
     private List<ResourceChange> getArticles() {
-        final List<Article> articles = provider.getArticles();
+        final Iterable<Resource> articles = provider.resources();
         return cabinet.compareArticles(articles);
     }
 }

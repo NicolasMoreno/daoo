@@ -3,17 +3,12 @@ package nicolasmoreno.tp5;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.ResourceObserver;
 import nicolasmoreno.tp5.resourceChange.ResourceChange;
 import nicolasmoreno.tp5.resourceProvider.ArticleProvider;
 import nicolasmoreno.tp5.resourceProvider.ClarinArticleProvider;
 import nicolasmoreno.tp5.resourceProvider.LaNacionArticleProvider;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.time.Duration;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,7 +16,6 @@ public class Main {
         ResourceStream resourceStream = new ResourceStream(laNacionArticleProvider);
         ArticleProvider clarinProvider = new ClarinArticleProvider(Duration.ofMinutes(1));
         ResourceStream resourceStream2 = new ResourceStream(clarinProvider);
-        clarinProvider.getArticles();
         Observer observer = new Observer<ResourceChange>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -47,7 +41,6 @@ public class Main {
         resourceStream2.subscribeActual(observer);
         try {
             Thread.sleep(100000000);
-            // TODO something not working well. But basically its working
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

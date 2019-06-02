@@ -4,11 +4,12 @@ public class Article implements Resource {
 
     private String link;
     private String label;
-    private String content;
+    private String body;
 
-    public Article(String link, String label) {
+    public Article(String link, String label, String body) {
         this.link = link;
         this.label = label;
+        this.body = body;
     }
 
     @Override
@@ -21,21 +22,26 @@ public class Article implements Resource {
         return label;
     }
 
-    public String getContent() {
-        return content;
+    @Override
+    public String body() {
+        return body;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Article) {
             final Article articleToCompare = (Article) obj;
-            return content.equals(articleToCompare.content);
+            return body.equals(articleToCompare.body);
             /*return (articleId.equals(articleToCompare.articleId)
-                    && content.equals(articleToCompare.content)
+                    && body.equals(articleToCompare.body)
                     && link.equals(articleToCompare.link));*/
         } else {
             return false;

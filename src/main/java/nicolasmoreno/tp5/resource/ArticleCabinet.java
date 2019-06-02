@@ -12,38 +12,38 @@ import static nicolasmoreno.tp5.resourceChange.ResourceChangeFactory.*;
 
 public class ArticleCabinet {
 
-    private List<Article> articles;
+    private List<Resource> articles;
 
     public ArticleCabinet() {
         this.articles = new ArrayList<>();
     }
 
-    public List<ResourceChange> compareArticles(List<Article> newArticles) {
-        List<ResourceChange> changes;
-        if (articles.size() == 0) {
-            changes = newArticles.stream()
-                    .map(ResourceChangeFactory::addedArticle).collect(Collectors.toList());
-        } else {
-            // Checkeo los nuevos con los viejos, para ver si fueron modificados o se agregaron nuevos
-            changes = newArticles.stream().map( article -> {
-                final Optional<Article> optionalArticle = articles.stream().filter(archivedArticle -> archivedArticle.id().equals(article.id())).findFirst();
-                if ( optionalArticle.isPresent() ) {
-                    final Article archivedArticle = optionalArticle.get();
-                    return archivedArticle.equals(article) ?
-                            unchangedArticle(article) :
-                            modifiedArticle(article);
+    public List<ResourceChange> compareArticles(Iterable<Resource> newArticles) {
+        List<ResourceChange> changes = new ArrayList<>();
+        newArticles.forEach( newArticle -> {
+            if (articles.size() == 0) {
+                changes.add(addedArticle(newArticle));
+                articles.add(newArticle);
+            } else {
+                final Optional<Resource> optionalArticle = articles.stream().filter(oldArticle -> oldArticle.id().equals(newArticle.link())).findFirst();
+                if (optionalArticle.isPresent()) {
+                    final Resource resource = optionalArticle.get();
+                    changes.add(resource.body().equalsIgnoreCase(newArticle.body()) ? unchangedArticle(newArticle) : modifiedArticle(newArticle));
                 } else {
-                    return addedArticle(article);
+                    changes.add(addedArticle(newArticle));
+                    articles.add(newArticle);
                 }
-            }).collect(Collectors.toList());
-        }
-        // Ahora debería checkear los viejos con los nuevos, para ver si los viejos fueron eliminados
-        articles.forEach( oldArticle -> {
-            final Optional<Article> optionalArticle = newArticles.stream().filter(newArticle -> newArticle.id().equals(oldArticle.id())).findFirst();
-            if (!optionalArticle.isPresent()) {
-                changes.add(removedArticle(oldArticle));
             }
         });
+        final List<String> collect = changes.stream().map(article -> article.resource().link()).collect(Collectors.toList());
+        if (collect.size() > 0) {
+            final List<Resource> removedArticles = articles.stream().filter(oldArticle -> collect.indexOf(oldArticle.link()) == -1).collect(Collectors.toList());
+            System.out.println("Removed articles = " + removedArticles.size());
+            removedArticles.forEach( removedArticle -> {
+                changes.add(removedArticle(removedArticle));
+                articles.remove(removedArticle);
+            });
+        }
         return changes;
     }
 

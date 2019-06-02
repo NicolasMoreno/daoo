@@ -1,6 +1,7 @@
 package nicolasmoreno.tp5.resourceProvider;
 
 import nicolasmoreno.tp5.resource.Article;
+import nicolasmoreno.tp5.resource.Resource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,8 +21,8 @@ public class LaNacionArticleProvider extends ArticleProvider {
     }
 
     @Override
-    public List<Article> getArticles() {
-        final List<Article> resourceList = new ArrayList<>();
+    public Iterable<Resource> resources() {
+        final List<Resource> resourceList = new ArrayList<>();
         try {
             Document lanacionDoc = Jsoup.connect(LA_NACION_URL).get();
             final Elements articles = lanacionDoc.getElementsByTag("article");
@@ -29,8 +30,7 @@ public class LaNacionArticleProvider extends ArticleProvider {
                 final Element firstFilter = element.selectFirst("h1, h2, h3");
                 final String link = LA_NACION_URL.concat(firstFilter.getElementsByAttribute("href").attr("href"));
                 final String label = firstFilter.selectFirst("a").text();
-                final Article article = new Article(link, label);
-                article.setContent(getArticleContent(link));
+                final Resource article = new Article(link, label, getArticleContent(link, "p"));
                 resourceList.add(article);
             });
             return resourceList;
@@ -40,7 +40,7 @@ public class LaNacionArticleProvider extends ArticleProvider {
         }
     }
 
-    private String getArticleContent(String link) {
+   /* private String getArticleContent(String link) {
         try {
             final Document document = Jsoup.connect(link).get();
             final Elements elements = document.getElementsByTag("p");
@@ -53,5 +53,5 @@ public class LaNacionArticleProvider extends ArticleProvider {
             e.printStackTrace();
             return "";
         }
-    }
+    }*/
 }
