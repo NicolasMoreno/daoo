@@ -1,4 +1,4 @@
-package nicolasmoreno.tp5.resourceChange;
+package nicolasmoreno.tp5.change;
 
 import nicolasmoreno.tp5.resource.Resource;
 
@@ -17,6 +17,6 @@ public class ResourceChangeFactory {
     }
 
     public static ResourceChange unchangedArticle(Resource resource) {
-        return new ArticleChange(resource, null);
+        return new ArticleChange(resource, null); // TODO NO!
     }
 }

@@ -1,4 +1,4 @@
-package nicolasmoreno.tp5.resourceChange;
+package nicolasmoreno.tp5.change;
 
 public enum ChangeType {
     ADD, REMOVE, MODIFY

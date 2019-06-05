@@ -1,14 +1,13 @@
 package nicolasmoreno.tp5.resource;
 
-import nicolasmoreno.tp5.resourceChange.ResourceChange;
-import nicolasmoreno.tp5.resourceChange.ResourceChangeFactory;
+import nicolasmoreno.tp5.change.ResourceChange;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static nicolasmoreno.tp5.resourceChange.ResourceChangeFactory.*;
+import static nicolasmoreno.tp5.change.ResourceChangeFactory.*;
 
 public class ArticleCabinet {
 

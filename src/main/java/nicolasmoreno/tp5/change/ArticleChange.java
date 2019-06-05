@@ -1,4 +1,4 @@
-package nicolasmoreno.tp5.resourceChange;
+package nicolasmoreno.tp5.change;
 
 import nicolasmoreno.tp5.resource.Resource;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package nicolasmoreno.tp5.resourceProvider;
+package nicolasmoreno.tp5.provider;
 
 import nicolasmoreno.tp5.resource.Article;
 import nicolasmoreno.tp5.resource.Resource;
