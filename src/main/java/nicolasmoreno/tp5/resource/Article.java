@@ -39,10 +39,7 @@ public class Article implements Resource {
     public boolean equals(Object obj) {
         if (obj instanceof Article) {
             final Article articleToCompare = (Article) obj;
-            return body.equals(articleToCompare.body);
-            /*return (articleId.equals(articleToCompare.articleId)
-                    && body.equals(articleToCompare.body)
-                    && link.equals(articleToCompare.link));*/
+            return link.equals(articleToCompare.link) && label.equals(articleToCompare.label);
         } else {
             return false;
         }

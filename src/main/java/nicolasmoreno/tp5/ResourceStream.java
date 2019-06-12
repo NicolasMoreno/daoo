@@ -30,6 +30,6 @@ public class ResourceStream extends Observable<ResourceChange> {
 
     private List<ResourceChange> getArticles() {
         final Iterable<Resource> articles = provider.resources();
-        return cabinet.compareArticles(articles);
+        return cabinet.detectChanges(articles);
     }
 }

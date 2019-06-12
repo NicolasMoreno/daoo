@@ -2,9 +2,7 @@ package nicolasmoreno.tp5.resource;
 
 import nicolasmoreno.tp5.change.ResourceChange;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static nicolasmoreno.tp5.change.ResourceChangeFactory.*;
@@ -15,6 +13,11 @@ public class ArticleCabinet {
 
     public ArticleCabinet() {
         this.articles = new ArrayList<>();
+    }
+
+    //Only for testing
+    ArticleCabinet(List<Resource> articles) {
+        this.articles = articles;
     }
 
     public List<ResourceChange> compareArticles(Iterable<Resource> newArticles) {
@@ -46,5 +49,55 @@ public class ArticleCabinet {
         return changes;
     }
 
+    /**
+     * Versión 2 de detección de cambios con los nuevos artículos
+     * @param newArticles nuevos artículos
+     * @return Lista de cambios
+     */
+    public List<ResourceChange> detectChanges(Iterable<Resource> newArticles) {
+        List<ResourceChange> changes = new ArrayList<>();
+        List<Resource> possibleRemovedResource = new ArrayList<>(); // Test if its empty
+        if (articles.isEmpty()) {
+            newArticles.forEach( newArticle -> {
+                articles.add(newArticle);
+                changes.add(addedArticle(newArticle));
+            });
+        }
+        else {
+            int iterationIndex = 0;
+            for (Resource newArticle: newArticles) {
+                final int articleIndex = articles.indexOf(newArticle);
+                if ( articleIndex > -1) {
+                    if (iterationIndex < articleIndex) { // Quiere decir que algo cambió
+                        final List<Resource> subList = articles.subList(iterationIndex, articleIndex);
+                        possibleRemovedResource.addAll(subList);
+                        articles.removeAll(subList);
+                    }
+                } else {
+                    final int removed = possibleRemovedResource.indexOf(newArticle);
+                    if (removed == -1) {
+                        changes.add(addedArticle(newArticle));
+                        articles.add(iterationIndex, newArticle);
+                    } else {
+                        changes.add(modifiedArticle(newArticle));
+                        articles.add(iterationIndex, possibleRemovedResource.remove(removed));
+                    }
+                }
+                iterationIndex++;
+            }
+            if (iterationIndex < articles.size()) {
+                final List<Resource> remainingResources = articles.subList(iterationIndex, articles.size());
+                remainingResources.forEach( elem -> changes.add(removedArticle(elem)));
+                articles.removeAll(remainingResources);
+            }
+            possibleRemovedResource.forEach( elem -> changes.add(removedArticle(elem)));
+        }
+        return changes;
+    }
 
+
+    // Only for testing
+    List<Resource> getArticles() {
+        return articles;
+    }
 }
