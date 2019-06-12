@@ -11,9 +11,11 @@ public class Main {
     public static void main(String[] args) {
 //        ArticleProvider laNacionArticleProvider = new LaNacionArticleProvider(Duration.ofMinutes(1));
 //        ArticleProvider clarinProvider = new ClarinArticleProvider(Duration.ofMinutes(1));
-        ResourceStream resourceStream = new ResourceStream(new LaNacionArticleProvider(Duration.ofSeconds(15)));
+        ResourceStream resourceStream = new ResourceStream(new LaNacionArticleProvider(Duration.ofMinutes(1)));
+        ResourceStream resourceStream2 = new ResourceStream(new ClarinArticleProvider(Duration.ofMinutes(1)));
         HashSet<ResourceStream> resourceSet = new HashSet<>();
         resourceSet.add(resourceStream);
+        resourceSet.add(resourceStream2);
         ResourceObserver observer = new ResourceObserver();
         NewsStream newsStream = new NewsStream(resourceSet);
         newsStream.subscribeActual(observer);
