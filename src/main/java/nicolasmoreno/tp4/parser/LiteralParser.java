@@ -12,7 +12,7 @@ public class LiteralParser implements Factory<Operand> {
     @NotNull
     @Override
     public Operand apply(@NotNull String line) {
-        return new OperandImpl(line.replaceAll("\"", ""));
+        return new OperandImpl(line);
     }
 
     @Override

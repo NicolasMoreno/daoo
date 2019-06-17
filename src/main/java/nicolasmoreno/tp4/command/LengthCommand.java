@@ -14,7 +14,8 @@ public class LengthCommand implements Command {
     public OperandStack execute(@NotNull OperandStack stack) {
         previousStack = stack;
         final Operand literalStringOperand = stack.pop().element();
-        return stack.push(new OperandImpl(literalStringOperand.print().length()));
+        final String value = literalStringOperand.print();
+        return stack.push(new OperandImpl(value.replaceAll("\"", "").length()));
     }
 
     @Override
