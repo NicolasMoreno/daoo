@@ -81,7 +81,7 @@ public class JSONVisitor implements Visitor {
             final WhereClause whereClause = (WhereClause) clause;
             currentState = "WHERE";
             whereClause.getCompoundExpression().accept(this);
-            jsonObject.append(currentState, stringBuilder);
+            jsonObject.append(currentState, stringBuilder.toString());
             stringBuilder.delete(0, stringBuilder.length());
         } else if (clause instanceof GroupByClause) {
             final GroupByClause groupByClause = (GroupByClause) clause;
@@ -92,19 +92,14 @@ public class JSONVisitor implements Visitor {
             final OrderByClause orderByClause = (OrderByClause) clause;
             currentState = "ORDER BY";
             iterativeVisit(orderByClause.getOrderBy());
-            jsonObject.append(currentState, stringBuilder);
+            jsonObject.append(currentState, stringBuilder.toString());
             stringBuilder.delete(0, stringBuilder.length());
         }
     }
 
     private void iterativeVisit(List<? extends Visitable> columnList) {
-        int i = 0;
         for (Visitable col: columnList) {
             col.accept(this);
-//            if (i < columnList.size() - 1) {
-//                jsonObject.append("SELECT", "");
-//            }
-            i++;
         }
     }
 }

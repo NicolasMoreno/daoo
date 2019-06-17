@@ -23,43 +23,4 @@ public class ImmutableListFactory {
         return newList;
     }
 
-    public static Result get(List<String> oldList) {
-        if (oldList.size() > 0) {
-            final ArrayList<String> newList = new ArrayList<>(oldList);
-            final String removed = newList.remove(oldList.size() - 1);
-            return new Result() {
-                @Override
-                public List tail() {
-                    return newList;
-                }
-
-                @Override
-                public String element() {
-                    return removed;
-                }
-            };
-        } else {
-            return new Result() {
-                @Override
-                public List tail() {
-                    return null;
-                }
-
-                @Override
-                public String element() {
-                    return null;
-                }
-            };
-        }
-    }
-
-    public interface Result {
-
-        /** Stack containing other operands left after pop (if any). */
-        List<String> tail();
-
-        /** Pop Operand result. */
-        String element();
-    }
-
 }

@@ -4,7 +4,6 @@ import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import nicolasmoreno.tp5.change.ResourceChange;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -74,7 +73,6 @@ public class ArticleCabinetTest {
 }
 
 class ResourceBuilder {
-
     static Resource resource(String link, String label) {
         return new Article(link, label, "test");
     }
