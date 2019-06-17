@@ -77,6 +77,7 @@ public class ReplTest {
     @Property
     public void lengthTest( String text) {
         assumeTrue(!text.equals(""));
+        assumeTrue(!text.contains("\""));
         final Repl repl = repl('"' + text + '"', "length");
         final Operand result = repl.environment.stack().peek();
         assertEquals("Asserting length", text.length(), (int)result.as(Integer.class));
